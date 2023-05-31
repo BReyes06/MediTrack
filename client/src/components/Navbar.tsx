@@ -14,7 +14,7 @@ export const Navbar = () => {
         <img src={Logo} alt="MediTrack Logo" />
       </NavLink>
       <button
-        className="navbar-toggler"
+        className="navbar-toggler mx-2"
         type="button"
         data-toggle="collapse"
         data-target="#navbarNav"
