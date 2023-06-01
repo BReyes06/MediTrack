@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class AppUser implements UserDetails {
@@ -136,8 +137,8 @@ public class AppUser implements UserDetails {
         this.enabled = enabled;
     }
 
-    public void setAuthorities(Collection<GrantedAuthority> authorities) {
-        this.authorities = authorities;
+    public void setAuthorities(List<String> roles) {
+        this.authorities = convertRolesToAuthorities(roles);
     }
 
     private static Collection<GrantedAuthority> convertRolesToAuthorities(List<String> roles) {
@@ -146,4 +147,16 @@ public class AppUser implements UserDetails {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AppUser appUser = (AppUser) o;
+        return appUserId == appUser.appUserId && enabled == appUser.enabled && Objects.equals(firstName, appUser.firstName) && Objects.equals(middleName, appUser.middleName) && Objects.equals(lastName, appUser.lastName) && Objects.equals(email, appUser.email) && Objects.equals(phone, appUser.phone) && Objects.equals(username, appUser.username) && Objects.equals(password, appUser.password) && Objects.equals(authorities, appUser.authorities);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(appUserId, firstName, middleName, lastName, email, phone, username, password, enabled, authorities);
+    }
 }

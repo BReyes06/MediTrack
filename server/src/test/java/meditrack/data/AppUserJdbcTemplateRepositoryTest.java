@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -55,7 +57,7 @@ class AppUserJdbcTemplateRepositoryTest {
         user.setPhone("1-johnnytest");
         user.setUsername("jtest");
         user.setPassword("asdlkfja");
-
+        user.setAuthorities(Arrays.asList("USER"));
 
         return user;
     }

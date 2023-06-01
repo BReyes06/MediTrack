@@ -68,15 +68,17 @@ public class AuthController {
 
     @PostMapping("/create_account")
     public ResponseEntity<?> createAccount(@RequestBody Map<String, String> credentials) {
-        String username = credentials.get("username");
-        String password = credentials.get("password");
-        String firstName = credentials.get("firstName");
-        String middleName = credentials.get("middleName");
-        String lastName = credentials.get("lastName");
-        String email = credentials.get("email");
-        String phone = credentials.get("phone");
+        AppUser appUser = new AppUser();
+        appUser.setFirstName(credentials.get("username"));
+        appUser.setPassword(credentials.get("password"));
+        appUser.setFirstName(credentials.get("firstName"));
+        appUser.setMiddleName(credentials.get("middleName"));
+        appUser.setLastName(credentials.get("lastName"));
+        appUser.setMiddleName(credentials.get("email"));
+        appUser.setLastName(credentials.get("phone"));
 
-        Result<AppUser> result = appUserService.create(username, password, firstName, middleName, lastName, email, phone);
+
+        Result<AppUser> result = appUserService.create(appUser);
 
         if (!result.isSuccess()) {
             return new ResponseEntity<>(result.getMessages(), HttpStatus.BAD_REQUEST);
