@@ -1,8 +1,11 @@
-import { NavLink } from "react-router-dom";
-
+import { NavLink, useNavigate } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
+import { useContext } from "react";
 import Logo from "../images/logo.ico";
 
 export const Navbar = () => {
+  const context = useContext(AuthContext);
+  const navigate = useNavigate();
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <NavLink
@@ -37,34 +40,53 @@ export const Navbar = () => {
             </NavLink>
           </li>
           <li className="nav-item">
-            <NavLink
-              to="/login"
-              className="nav-link"
-              data-toggle="collapse"
-              data-target="#navbarNav"
-            >
-              Log In
-            </NavLink>
+            {!context!.user && (
+              <NavLink
+                to="/login"
+                className="nav-link"
+                data-toggle="collapse"
+                data-target="#navbarNav"
+              >
+                Log In
+              </NavLink>
+            )}
           </li>
           <li className="nav-item">
-            <NavLink
-              to="/signup"
-              className="nav-link"
-              data-toggle="collapse"
-              data-target="#navbarNav"
-            >
-              Sign Up
-            </NavLink>
+            {!context!.user && (
+              <NavLink
+                to="/signup"
+                className="nav-link"
+                data-toggle="collapse"
+                data-target="#navbarNav"
+              >
+                Sign Up
+              </NavLink>
+            )}
           </li>
           <li className="nav-item">
-            <NavLink
-              to="/prescriptions"
-              className="nav-link"
-              data-toggle="collapse"
-              data-target="#navbarNav"
-            >
-              Prescriptions
-            </NavLink>
+            {context!.user && (
+              <NavLink
+                to="/prescriptions"
+                className="nav-link"
+                data-toggle="collapse"
+                data-target="#navbarNav"
+              >
+                Prescriptions
+              </NavLink>
+            )}
+          </li>
+          <li className="nav-item">
+            {context!.user && (
+              <button
+                className="btn btn-danger"
+                onClick={() => {
+                  context!.logout();
+                  navigate("/");
+                }}
+              >
+                Log Out
+              </button>
+            )}
           </li>
         </ul>
       </div>

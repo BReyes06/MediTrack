@@ -1,0 +1,21 @@
+@url = http://localhost:8080
+
+### 
+
+# POST: Should create token for existing user 
+POST {{url}}/authenticate HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "breyes",
+    "password": "P@ssw0rd!"
+}
+
+###
+# POST: Should create a user.
+POST {{url}}/refresh_token HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtZWRpdHJhY2siLCJzdWIiOiJicmV5ZXMiLCJhcHBfdXNlcl9pZCI6MiwiYXV0aG9yaXRpZXMiOiJBRE1JTiIsImV4cCI6MTY4NTY1MjEyNH0.GWo6BCYyQgVKvBTMevFBDs0CNHRe4ZfCJRVtSyjzsw0
+
+
+###

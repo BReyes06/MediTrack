@@ -1,4 +1,4 @@
-const API_URL = "https://localhost:8080";
+const API_URL = "http://localhost:8080";
 
 function makeUser(token: string) {
   const splitToken = token.split(".");
@@ -32,6 +32,27 @@ export async function authenticate(user: object) {
   }
 }
 
+export async function refresh() {
+  const init = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+    },
+  };
+
+  const response = await fetch(`${API_URL}/refresh_token`, init);
+
+  if (response.ok) {
+    const data = await response.json();
+    const token = data.jwt_token;
+    localStorage.setItem("jwt", token);
+    const user = makeUser(token);
+    return Promise.resolve(user);
+  }
+
+  return Promise.reject();
+}
 export async function createAccount(newUser: object) {
   const init = {
     method: "POST",
