@@ -15,10 +15,10 @@ public class AppUser implements UserDetails {
     private String lastName;
     private String email;
     private String phone;
-    private final String username;
-    private final String password;
-    private final boolean enabled;
-    private final Collection<GrantedAuthority> authorities;
+    private String username;
+    private String password;
+    private boolean enabled;
+    private Collection<GrantedAuthority> authorities;
 
     public AppUser(int appUserId, String firstName, String middleName, String lastName, String email, String phone, String username, String password, boolean enabled, List<String> roles) {
         this.appUserId = appUserId;
@@ -33,39 +33,47 @@ public class AppUser implements UserDetails {
         this.authorities = convertRolesToAuthorities(roles);
     }
 
+    public AppUser(String username, List<String> roles) {
+        this.username = username;
+        this.authorities = convertRolesToAuthorities(roles);
+    }
+
+    public AppUser() {
+    }
+
     @Override
     public Collection<GrantedAuthority> getAuthorities() {
-        return null;
+        return authorities;
     }
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return username;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return enabled;
     }
 
     public int getAppUserId() {
@@ -114,6 +122,22 @@ public class AppUser implements UserDetails {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public void setAuthorities(Collection<GrantedAuthority> authorities) {
+        this.authorities = authorities;
     }
 
     private static Collection<GrantedAuthority> convertRolesToAuthorities(List<String> roles) {

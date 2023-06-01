@@ -27,12 +27,7 @@ public class JwtConverter {
 
         return Jwts.builder()
                 .setIssuer(ISSUER)
-                .claim("username", user.getUsername())
-                .claim("first_name", user.getFirstName())
-                .claim("middle_name", user.getMiddleName())
-                .claim("last_name", user.getLastName())
-                .claim("email", user.getEmail())
-                .claim("phone", user.getPhone())
+                .setSubject(user.getUsername())
                 .claim("app_user_id", user.getAppUserId())
                 .claim("authorities", authorities)
                 .setExpiration(new Date(System.currentTimeMillis()+EXPIRATION_MILLISECONDS))
@@ -52,20 +47,15 @@ public class JwtConverter {
                     .build()
                     .parseClaimsJws(token.substring(7));
 
-            int appUserId = (int) jws.getBody().get("app_user_id");
-            String username = (String) jws.getBody().get("username");
-            String firstName = (String) jws.getBody().get("first_name");
-            String middleName = (String) jws.getBody().get("middle_name");
-            String lastName = (String) jws.getBody().get("last_name");
-            String email = (String) jws.getBody().get("email");
-            String phone = (String) jws.getBody().get("phone");
+
+            String username = jws.getBody().getSubject();
             String authStr = (String) jws.getBody().get("authorities");
 
             List<SimpleGrantedAuthority> roles = Arrays.stream(authStr.split(","))
                     .map(r -> new SimpleGrantedAuthority(r))
                     .collect(Collectors.toList());
 
-            return new AppUser(appUserId, firstName, middleName, lastName, email, phone, username, null, true, Arrays.asList(authStr.split(",")));
+            return new AppUser(username, Arrays.asList(authStr.split(",")));
         } catch (JwtException ex) {
             // Exception acknowledged
         }
