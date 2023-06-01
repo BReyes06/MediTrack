@@ -35,21 +35,22 @@ public class AppUserService implements UserDetailsService {
         return appUser;
     }
 
-    public Result<AppUser> create(String username, String password, String firstName,
-                                  String middleName, String lastName, String email, String phone) {
-        Result<AppUser> result = validate(username, password, firstName, middleName, lastName, email, phone);
+    public Result<AppUser> create(AppUser user) {
+        Result<AppUser> result = validate(user);
 
         if (!result.isSuccess()) {
             return result;
         }
 
-        password = encoder.encode(password);
+        user.setPassword(encoder.encode(user.getPassword()));
 
-        AppUser appUser = new AppUser(0, firstName, middleName, lastName, email, phone, username, password, true, List.of("USER"));
+        user.setEnabled(true);
+        user.setAuthorities(List.of("USER"));
+
 
         try {
-            appUser = repository.create(appUser);
-            result.setPayload(appUser);
+            user = repository.create(user);
+            result.setPayload(user);
         } catch (DuplicateKeyException e) {
             result.addMessage("Username already exists, please try again", ResultType.INVALID);
         }
@@ -57,40 +58,39 @@ public class AppUserService implements UserDetailsService {
         return result;
     }
 
-    private Result<AppUser> validate(String username, String password, String firstName,
-                                     String middleName, String lastName, String email, String phone) {
+    private Result<AppUser> validate(AppUser user) {
         Result<AppUser> result = new Result<>();
-        if (username == null || username.isBlank()) {
+        if (user.getUsername() == null || user.getUsername().isBlank()) {
             result.addMessage("Username is required", ResultType.INVALID);
             return result;
         }
 
-        if (password == null) {
+        if (user.getPassword() == null) {
             result.addMessage("Password is required", ResultType.INVALID);
             return result;
         }
 
-        if (firstName == null) {
+        if (user.getFirstName() == null) {
             result.addMessage("First name is required", ResultType.INVALID);
             return result;
         }
 
-        if (lastName == null) {
+        if (user.getLastName() == null) {
             result.addMessage("Last name is required", ResultType.INVALID);
             return result;
         }
 
-        if (email == null) {
+        if (user.getEmail() == null) {
             result.addMessage("An email address is required", ResultType.INVALID);
             return result;
         }
 
-        if (phone == null) {
+        if (user.getPhone() == null) {
             result.addMessage("Phone number is required", ResultType.INVALID);
             return result;
         }
 
-        if (!isValidPassword(password)) {
+        if (!isValidPassword(user.getPassword())) {
             result.addMessage("Password must contain atleast 8 characters, contain a digit, a letter, and a symbol.", ResultType.INVALID);
         }
 
