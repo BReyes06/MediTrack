@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.DuplicateKeyException;
 
 import java.util.Arrays;
 
@@ -57,6 +58,19 @@ class AppUserServiceTest {
 
         assertEquals(ResultType.INVALID, result.getType());
         assertEquals("Username is required", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotAddDuplicateUsername() {
+        AppUser appUser = makeUser();
+        DuplicateKeyException error = new DuplicateKeyException("");
+
+        when(repository.create(appUser)).thenThrow(error);
+        Result<AppUser> result = service.create(appUser);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertNull(result.getPayload());
+        assertEquals("Username already exists, please try again", result.getMessages().get(0));
     }
 
     @Test
