@@ -4,6 +4,7 @@ import meditrack.data.mappers.AppUserMapper;
 import meditrack.models.AppUser;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +30,7 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository{
 
         final String sql = "select app_user_id, first_name, middle_name, last_name, email, phone, username, password_hash, enabled "
                 + "from app_user "
-                + "where username = ?";
+                + "where username = ?;";
 
         return jdbcTemplate.query(sql, new AppUserMapper(roles), username)
                 .stream()
@@ -41,9 +42,9 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository{
     @Transactional
     public AppUser create(AppUser user) {
         final String sql = "insert into app_user (first_name, middle_name, last_name, email, phone, username, password_hash) "
-                + "values (?, ?, ?, ?, ?, ?, ?)";
+                + "values (?, ?, ?, ?, ?, ?, ?);";
 
-        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         int rowsAffected = jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, user.getFirstName());
@@ -75,10 +76,10 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository{
 
     private List<String> getRolesByUsername(String username) {
         final String sql = "select r.name "
-                + "from app_user_role ur"
+                + "from app_user_role ur "
                 + "inner join app_role r on ur.app_role_id = r.app_role_id "
-                + "inner join app_user au on ur.app_user.id = au.app_user_id "
-                + "where au.username = ?";
+                + "inner join app_user au on ur.app_user_id = au.app_user_id "
+                + "where au.username = ?;";
         return jdbcTemplate.query(sql, (rs, rowId) -> rs.getString("name"), username);
     }
 

@@ -1,6 +1,6 @@
-drop database if exists meditrack;
-create database meditrack;
-use meditrack;
+drop database if exists meditrack_test;
+create database meditrack_test;
+use meditrack_test;
 
 create table app_user (
 	app_user_id int primary key auto_increment,
@@ -79,42 +79,81 @@ create table app_user_role (
         references app_role(app_role_id)
 );
 
-insert into app_user (first_name, middle_name, last_name, email, phone, username, password_hash, enabled)
+delimiter //
+
+create procedure set_known_good_state()
+begin
+	
+    set sql_safe_updates = 0;
+    
+	delete from app_user_role;
+    alter table app_user_role auto_increment = 1;
+    
+	delete from tracker;
+	alter table tracker auto_increment = 1;
+    
+    delete from prescription;
+    alter table prescription auto_increment = 1;
+	
+    delete from pharmacy;
+    alter table pharmacy auto_increment = 1;
+    
+    delete from doctor;
+    alter table doctor auto_increment = 1;
+    
+	delete from app_user;
+    alter table app_user auto_increment = 1;
+    
+    delete from app_role;
+    alter table app_role auto_increment = 1;
+    
+	set sql_safe_updates = 1;
+    
+    -- passwords are set to "P@ssw0rd!"
+  
+	insert into app_user (first_name, middle_name, last_name, email, phone, username, password_hash, enabled)
 		values
 			('Marvis','', 'Chan', 'mchan@email.com', '1-111-111-1111', 'mchan', '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnYrtQQi8Z3IZzQa', 1),
 			('Bernanrdo','Reyes', 'Badilla', 'breyes@email.com', '1-222-222-2222', 'breyes', '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnYrtQQi8Z3IZzQa', 1);
 
-insert into pharmacy(pharmacy_id,`name`, email, phone, address)
+	insert into app_role (`name`) 
+		values
+			('USER'),
+			('ADMIN');
+          
+    insert into app_user_role
+		values
+			(1, 1),
+			(2, 2);
+	
+	insert into pharmacy(pharmacy_id,`name`, email, phone, address)
 		values
 			(1, 'Rite Aid', 'pharmacy@riteaid.com', '1-800-riteaid', '12 Rite St'),
 			(2, 'WalGreens', 'pharmaWG@walgreens.com', '1-800-walgreen', '35 Greens St'),
 			(3, 'MetroPharma', 'metroph@metropharma.com', '1-800-metroph', '2009 Card Road');
 				
-insert into doctor(doctor_id, first_name, middle_name, last_name, location, phone)
-	values
-		(1, 'Phillip', 'C','McGraw', 'Paramount Los Angeles, CA', '1-800-DrPhil'),
-		(2, 'Otto', 'Gunther', 'Octavius', 'Daily Bugle NYC, NY', '1-800-DocOct'),
-		(3, 'Gregory', '', 'House', 'Princeton-Plainsboro Teaching Hospital Princeton, NJ', '1-800-Laurie');
+	insert into doctor(doctor_id, first_name, middle_name, last_name, location, phone)
+		values
+			(1, 'Phillip', 'C','McGraw', 'Paramount Los Angeles, CA', '1-800-DrPhil'),
+			(2, 'Otto', 'Gunther', 'Octavius', 'Daily Bugle NYC, NY', '1-800-DocOct'),
+			(3, 'Gregory', '', 'House', 'Princeton-Plainsboro Teaching Hospital Princeton, NJ', '1-800-Laurie');
             
-insert into prescription(prescription_id, pill_count, frequency, `date`, start_time, product_ndc, app_user_id, doctor_id, pharmacy_id)
-	values
-		(1, 30, 4, '2023-05-31', '2023-05-31 10:00:00','68788-7602-3', 1, 3, 1),
-		(2, 10, 24, '2023-05-31', '2023-05-31 10:00:00', '67877-511-38', 1, 2, 2);        
-            
+     	insert into prescription(prescription_id, pill_count, frequency, `date`, start_time, product_ndc, app_user_id, doctor_id, pharmacy_id)
+		values
+			(1, 30, 4, '2023-05-31', '2023-05-31 8:00:00','68788-7602-3', 1, 3, 1),
+			(2, 10, 24, '2023-05-31', '2023-05-31 8:00:00', '67877-511-38', 1, 2, 2);          
+       
+    insert into tracker(tracker_id, administration_time, prescription_id)
+		values
+			(1, '2023-05-31 10:00:00', 1),
+			(2, '2023-05-31 10:00:00', 2),
+			(3, '2023-05-31 14:00:00', 1),
+			(4, '2023-05-31 18:00:00', 1);   
+ 
+end //
 
-insert into tracker(tracker_id, administration_time, prescription_id)
-	values
-		(1, '2023-05-31 10:00:00', 1),
-		(2, '2023-05-31 10:00:00', 2),
-		(3, '2023-05-31 14:00:00', 1),
-		(4, '2023-05-31 18:00:00', 1);
-		
-insert into app_role (`name`) 
-	values
-		('USER'),
-		('ADMIN');
+delimiter ;
 
-insert into app_user_role
-	values
-		(1, 1),
-		(2, 2);
+call set_known_good_state();
+call set_known_good_state();
+call set_known_good_state();
