@@ -72,7 +72,6 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository{
     @Transactional
     public boolean update(AppUser user) {
         final String sql = "update app_user set "
-                + "first_name = ?, "
                 + "middle_name = ?, "
                 + "last_name = ?, "
                 + "email = ?, "
@@ -83,7 +82,6 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository{
                 + "where app_user_id = ?;";
 
         if (jdbcTemplate.update(sql,
-                user.getFirstName(),
                 user.getMiddleName(),
                 user.getLastName(),
                 user.getEmail(),
