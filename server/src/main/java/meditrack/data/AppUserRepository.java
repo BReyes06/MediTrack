@@ -7,6 +7,6 @@ public interface AppUserRepository {
 
     public AppUser create(AppUser user);
 
-    public void update(AppUser user);
+    public boolean update(AppUser user);
 
 }
