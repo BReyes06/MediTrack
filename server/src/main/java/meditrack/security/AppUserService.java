@@ -58,8 +58,38 @@ public class AppUserService implements UserDetailsService {
         return result;
     }
 
+    public Result<AppUser> update(AppUser user) {
+        Result<AppUser> result = validate(user);
+
+        if (!result.isSuccess()) {
+            return result;
+        }
+
+        if (user.getAppUserId() <= 0) {
+            result.addMessage("User ID must be provided", ResultType.INVALID);
+            return result;
+        }
+
+        user.setPassword(encoder.encode(user.getPassword()));
+        user.setEnabled(true);
+        user.setAuthorities(List.of("USER"));
+
+        if (!repository.update(user)) {
+            String msg = String.format("User %s was not found and could not be updated.", user.getAppUserId());
+            result.addMessage(msg, ResultType.NOT_FOUND);
+            return result;
+        }
+
+        return result;
+    }
+
     private Result<AppUser> validate(AppUser user) {
         Result<AppUser> result = new Result<>();
+        if (user == null) {
+            result.addMessage("User must contain valid information.", ResultType.INVALID);
+            return result;
+        }
+
         if (user.getUsername() == null || user.getUsername().isBlank()) {
             result.addMessage("Username is required", ResultType.INVALID);
             return result;

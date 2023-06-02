@@ -70,8 +70,32 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository{
 
     @Override
     @Transactional
-    public void update(AppUser user) {
+    public boolean update(AppUser user) {
+        final String sql = "update app_user set "
+                + "first_name = ?, "
+                + "middle_name = ?, "
+                + "last_name = ?, "
+                + "email = ?, "
+                + "phone = ?, "
+                + "username = ?, "
+                + "password_hash = ?, "
+                + "enabled = ? "
+                + "where app_user_id = ?;";
 
+        if (jdbcTemplate.update(sql,
+                user.getFirstName(),
+                user.getMiddleName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getPhone(),
+                user.getUsername(),
+                user.getPassword(),
+                user.isEnabled(),
+                user.getAppUserId()) > 0) {
+            updateRoles(user);
+            return true;
+        }
+        return false;
     }
 
     private List<String> getRolesByUsername(String username) {
