@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { authenticate } from "../services/auth";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
+import { refresh } from "../services/auth";
 
 type User = {
   username: string;
@@ -34,6 +35,7 @@ export const Login: React.FC = () => {
     authenticate(user)
       .then((loggedInUser) => {
         context!.login(loggedInUser);
+        setTimeout(refresh, 14 * 60 * 1000);
         navigate("/");
       })
       .catch(() => setError(true));

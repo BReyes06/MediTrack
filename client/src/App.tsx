@@ -12,6 +12,7 @@ import { Prescriptions } from "./components/Prescriptions";
 import { NotFound } from "./components/NotFound";
 
 import { refresh } from "./services/auth";
+import { PrescriptionForm } from "./components/PrescriptionForm";
 
 const App: React.FC = () => {
   const [restoreLoginAttemptCompleted, setRestoreLoginAttemptCompleted] =
@@ -46,6 +47,7 @@ const App: React.FC = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/prescriptions" element={<Prescriptions />} />
+            <Route path="/prescriptions/add" element={<PrescriptionForm />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
