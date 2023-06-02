@@ -92,31 +92,27 @@ public class AppUserService implements UserDetailsService {
 
         if (user.getUsername() == null || user.getUsername().isBlank()) {
             result.addMessage("Username is required", ResultType.INVALID);
-            return result;
         }
 
-        if (user.getPassword() == null) {
-            result.addMessage("Password is required", ResultType.INVALID);
-            return result;
-        }
 
         if (user.getFirstName() == null) {
             result.addMessage("First name is required", ResultType.INVALID);
-            return result;
         }
 
         if (user.getLastName() == null) {
             result.addMessage("Last name is required", ResultType.INVALID);
-            return result;
         }
 
         if (user.getEmail() == null) {
             result.addMessage("An email address is required", ResultType.INVALID);
-            return result;
         }
 
         if (user.getPhone() == null) {
             result.addMessage("Phone number is required", ResultType.INVALID);
+        }
+
+        if (user.getPassword() == null || user.getPassword().isBlank()) {
+            result.addMessage("Password is required", ResultType.INVALID);
             return result;
         }
 

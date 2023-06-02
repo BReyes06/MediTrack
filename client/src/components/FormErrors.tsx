@@ -9,7 +9,7 @@ export const FormErrors = (props: ErrorsProps) => {
 
   return (
     <>
-      <div className="alert alert-danger" role="alert">
+      <div className="alert alert-danger mt-3 form-errors" role="alert">
         <h3>Errors</h3>
         <p>The following errors occurred:</p>
         <ul>

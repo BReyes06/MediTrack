@@ -4,7 +4,7 @@ import { useState } from "react";
 import { createAccount } from "../services/auth";
 import { FormErrors } from "./FormErrors";
 
-type INITIAL_USER = {
+type User = {
   username: string;
   password: string;
   email: string;
@@ -14,7 +14,7 @@ type INITIAL_USER = {
   lastName: string;
 };
 
-let INITIAL_USER = {
+let INITIAL_USER: User = {
   username: "",
   password: "",
   email: "",
@@ -48,7 +48,7 @@ export const Signup = () => {
 
   return (
     <section>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="signup-form">
         <h2>Create an account.</h2>
         <div>
           <label htmlFor="username" className="form-text">
