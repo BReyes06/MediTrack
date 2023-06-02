@@ -72,13 +72,13 @@ public class AuthController {
     @PostMapping("/create_account")
     public ResponseEntity<?> createAccount(@RequestBody Map<String, String> credentials) {
         AppUser appUser = new AppUser();
-        appUser.setFirstName(credentials.get("username"));
+        appUser.setUsername(credentials.get("username"));
         appUser.setPassword(credentials.get("password"));
         appUser.setFirstName(credentials.get("firstName"));
         appUser.setMiddleName(credentials.get("middleName"));
         appUser.setLastName(credentials.get("lastName"));
-        appUser.setMiddleName(credentials.get("email"));
-        appUser.setLastName(credentials.get("phone"));
+        appUser.setEmail(credentials.get("email"));
+        appUser.setPhone(credentials.get("phone"));
 
 
         Result<AppUser> result = appUserService.create(appUser);
@@ -106,13 +106,13 @@ public class AuthController {
 
         AppUser existingUser = (AppUser) userDetails;
 
-        existingUser.setFirstName(credentials.get("username"));
+        existingUser.setUsername(credentials.get("username"));
         existingUser.setPassword(credentials.get("password"));
         existingUser.setFirstName(credentials.get("firstName"));
         existingUser.setMiddleName(credentials.get("middleName"));
         existingUser.setLastName(credentials.get("lastName"));
-        existingUser.setMiddleName(credentials.get("email"));
-        existingUser.setLastName(credentials.get("phone"));
+        existingUser.setEmail(credentials.get("email"));
+        existingUser.setPhone(credentials.get("phone"));
 
         Result<AppUser> result = appUserService.update(existingUser);
 

@@ -32,3 +32,8 @@ body {
   max-width: 500px;
   max-height: 500px;
 }
+
+.form-errors,
+.signup-form {
+  width: 300px;
+}

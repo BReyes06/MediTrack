@@ -53,6 +53,7 @@ export async function refresh() {
 
   return Promise.reject();
 }
+
 export async function createAccount(newUser: object) {
   const init = {
     method: "POST",
@@ -68,6 +69,7 @@ export async function createAccount(newUser: object) {
     return Promise.resolve();
   }
 
+  console.log(response);
   const errors = await response.json();
   return Promise.reject(errors);
 }
