@@ -24,6 +24,7 @@ public class SecurityConfig {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.GET, "api/**").permitAll()
                 .antMatchers("/create_account").permitAll()
+                .antMatchers("/update_account").permitAll()
                 .antMatchers("/refresh_token").authenticated()
                 .antMatchers(HttpMethod.POST, "/authenticate").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/**").hasAnyAuthority("USER", "ADMIN")
