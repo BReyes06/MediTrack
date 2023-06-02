@@ -78,14 +78,23 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository{
                 + "email = ?, "
                 + "phone = ?, "
                 + "username = ?, "
-                + "password = ?, "
+                + "password_hash = ?, "
                 + "enabled = ? "
                 + "where app_user_id = ?;";
 
-        jdbcTemplate.update(sql,
-                user.getFirstName(), user.getMiddleName(), user.getLastName(), user.getEmail(), user.getPhone(), user.getUsername(), user.getPassword(), user.isEnabled(), user.getAppUserId());
-
-        updateRoles(user);
+        if (jdbcTemplate.update(sql,
+                user.getFirstName(),
+                user.getMiddleName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getPhone(),
+                user.getUsername(),
+                user.getPassword(),
+                user.isEnabled(),
+                user.getAppUserId()) > 0) {
+            updateRoles(user);
+            return true;
+        }
         return false;
     }
 

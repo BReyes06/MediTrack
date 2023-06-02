@@ -85,6 +85,11 @@ public class AppUserService implements UserDetailsService {
 
     private Result<AppUser> validate(AppUser user) {
         Result<AppUser> result = new Result<>();
+        if (user == null) {
+            result.addMessage("User must contain valid information.", ResultType.INVALID);
+            return result;
+        }
+
         if (user.getUsername() == null || user.getUsername().isBlank()) {
             result.addMessage("Username is required", ResultType.INVALID);
             return result;

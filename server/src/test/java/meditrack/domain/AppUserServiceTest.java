@@ -1,9 +1,10 @@
-package meditrack.security;
+package meditrack.domain;
 
 import meditrack.data.AppUserRepository;
 import meditrack.domain.Result;
 import meditrack.domain.ResultType;
 import meditrack.models.AppUser;
+import meditrack.security.AppUserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -47,6 +48,13 @@ class AppUserServiceTest {
 
         assertEquals(ResultType.SUCCESS, result.getType());
         assertEquals(expected, result.getPayload());
+    }
+
+    @Test
+    void shouldNotAddNull() {
+        Result<AppUser> result = service.create(null);
+
+        assertEquals(ResultType.INVALID, result.getType());
     }
 
     @Test
@@ -167,6 +175,154 @@ class AppUserServiceTest {
         user.setPhone(null);
 
         Result<AppUser> result = service.create(user);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Phone number is required", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldUpdate() {
+        AppUser user = makeUser();
+
+        when(repository.update(user)).thenReturn(true);
+        Result<AppUser> result = service.update(user);
+
+        assertEquals(ResultType.SUCCESS, result.getType());
+    }
+
+    @Test
+    void shouldNotUpdateNull() {
+        Result<AppUser> result = service.update(null);
+
+        assertEquals(ResultType.INVALID, result.getType());
+    }
+
+    @Test
+    void shouldNotUpdateIfIdIsInvalid() {
+        AppUser user = makeUser();
+        user.setAppUserId(0);
+
+        Result<AppUser> result = service.update(user);
+
+        assertEquals(ResultType.INVALID, result.getType());
+    }
+
+    @Test
+    void shouldNotUpdateIfNotFound() {
+        AppUser user = makeUser();
+        user.setAppUserId(999);
+
+        when(repository.update(user)).thenReturn(false);
+        Result<AppUser> result = service.update(user);
+
+        assertEquals(ResultType.NOT_FOUND, result.getType());
+    }
+
+    @Test
+    void shouldNotUpdateWithoutUsername() {
+        AppUser user = makeUser();
+        user.setUsername(null);
+
+        Result<AppUser> result = service.update(user);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Username is required", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateWithoutPassword() {
+        AppUser user = makeUser();
+        user.setPassword(null);
+
+        Result<AppUser> result = service.update(user);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Password is required", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateWhenPasswordLessThan8Chars() {
+        AppUser user = makeUser();
+        user.setPassword("asdf");
+
+        Result<AppUser> result = service.update(user);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Password must contain atleast 8 characters, contain a digit, a letter, and a symbol.", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateWhenPasswordDoesNotContainLetter() {
+        AppUser user = makeUser();
+        user.setPassword("12345678");
+
+        Result<AppUser> result = service.update(user);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Password must contain atleast 8 characters, contain a digit, a letter, and a symbol.", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateWhenPasswordDoesNotContainDigit() {
+        AppUser user = makeUser();
+        user.setPassword("qwerasdf");
+
+        Result<AppUser> result = service.update(user);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Password must contain atleast 8 characters, contain a digit, a letter, and a symbol.", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateWhenPasswordDoesNotContainSymbol() {
+        AppUser user = makeUser();
+        user.setPassword("asdf5678");
+
+        Result<AppUser> result = service.update(user);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Password must contain atleast 8 characters, contain a digit, a letter, and a symbol.", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateWithoutFirstName() {
+        AppUser user = makeUser();
+        user.setFirstName(null);
+
+        Result<AppUser> result = service.update(user);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("First name is required", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateWithoutLastName() {
+        AppUser user = makeUser();
+        user.setLastName(null);
+
+        Result<AppUser> result = service.update(user);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Last name is required", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateWithoutEmail() {
+        AppUser user = makeUser();
+        user.setEmail(null);
+
+        Result<AppUser> result = service.update(user);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("An email address is required", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateWithoutPhone() {
+        AppUser user = makeUser();
+        user.setPhone(null);
+
+        Result<AppUser> result = service.update(user);
 
         assertEquals(ResultType.INVALID, result.getType());
         assertEquals("Phone number is required", result.getMessages().get(0));
