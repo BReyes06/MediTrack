@@ -37,3 +37,24 @@ body {
 .signup-form {
   width: 300px;
 }
+
+.med-input {
+  border: 2px solid black;
+}
+
+.med-btn {
+  background-color: none;
+  border: 2px solid black;
+  border-radius: 0.25rem;
+  margin-left: -5px;
+}
+
+.prescription-form input,
+.prescription-form select {
+  border: 2px solid black;
+  border-radius: 0.25rem;
+}
+
+.prescription-form .form-text {
+  font-weight: bold;
+}
