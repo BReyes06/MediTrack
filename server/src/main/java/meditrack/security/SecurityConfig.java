@@ -22,14 +22,14 @@ public class SecurityConfig {
         http.csrf().disable();
         http.cors();
         http.authorizeRequests()
-                .antMatchers(HttpMethod.GET, "api/**").permitAll()
                 .antMatchers("/create_account").permitAll()
                 .antMatchers("/update_account").permitAll()
                 .antMatchers("/refresh_token").authenticated()
                 .antMatchers(HttpMethod.POST, "/authenticate").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/**").hasAnyAuthority("USER", "ADMIN")
-                .antMatchers(HttpMethod.PUT, "/api/**").hasAnyAuthority("USER", "ADMIN")
-                .antMatchers(HttpMethod.DELETE, "/api/**").hasAnyAuthority("ADMIN")
+                .antMatchers(HttpMethod.GET,"/prescription/**").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers(HttpMethod.POST, "/prescription/**").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers(HttpMethod.PUT, "/prescription/**").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/prescription/**").hasAnyAuthority("ADMIN")
                 .antMatchers("/**").denyAll()
                 .and()
                 .addFilter(new JwtRequestFilter(authenticationManager(authConfig), converter))
