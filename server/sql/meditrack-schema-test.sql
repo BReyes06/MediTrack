@@ -34,8 +34,7 @@ create table doctor (
 create table prescription (
 	prescription_id int primary key auto_increment,
     pill_count int not null,
-    frequency int not null,
-    `date` date not null,
+    hourly_interval int not null,
     start_time datetime not null,
     product_ndc varchar(255) not null,
     app_user_id int not null,
@@ -138,10 +137,10 @@ begin
 			(2, 'Otto', 'Gunther', 'Octavius', 'Daily Bugle NYC, NY', '1-800-DocOct'),
 			(3, 'Gregory', '', 'House', 'Princeton-Plainsboro Teaching Hospital Princeton, NJ', '1-800-Laurie');
             
-     	insert into prescription(prescription_id, pill_count, frequency, `date`, start_time, product_ndc, app_user_id, doctor_id, pharmacy_id)
+     	insert into prescription(prescription_id, pill_count, hourly_interval, start_time, product_ndc, app_user_id, doctor_id, pharmacy_id)
 		values
-			(1, 30, 4, '2023-05-31', '2023-05-31 8:00:00','68788-7602-3', 1, 3, 1),
-			(2, 10, 24, '2023-05-31', '2023-05-31 8:00:00', '67877-511-38', 1, 2, 2);          
+			(1, 30, 4, '2023-05-31 8:00:00','68788-7602-3', 1, 3, 1),
+			(2, 10, 24, '2023-05-31 8:00:00', '67877-511-38', 1, 2, 2);          
        
     insert into tracker(tracker_id, administration_time, prescription_id)
 		values
