@@ -3,6 +3,7 @@ package meditrack.domain;
 import meditrack.data.DoctorRepository;
 import meditrack.data.PharmacyRepository;
 import meditrack.data.PrescriptionRepository;
+import meditrack.models.AppUser;
 import meditrack.models.Doctor;
 import meditrack.models.Pharmacy;
 import meditrack.models.Prescription;
@@ -47,6 +48,83 @@ class PrescriptionServiceTest {
         assertEquals(2, result.size());
     }
 
+    @Test
+    void shouldAddValidPrescription() {
+        Prescription prescription = makePrescription();
+        prescription.setPrescriptionId(0);
+        Prescription expected = makePrescription();
+
+        when(prescriptionRepository.add(prescription)).thenReturn(expected);
+
+        Result<Prescription> result = service.add(prescription);
+
+        assertEquals(ResultType.SUCCESS, result.getType());
+    }
+
+    @Test
+    void shouldNotAddWhenNullPrescription() {
+        Result<Prescription> result = service.add(null);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Prescription must contain valid information", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotAddWhenInvalidAppUser() {
+        Prescription prescription = makePrescription();
+        prescription.setAppUser(null);
+
+        Result<Prescription> result = service.add(prescription);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("There must be a valid user for this prescription", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotAddWhenPillCountInvalid() {
+        Prescription prescription = makePrescription();
+        prescription.setPillCount(0);
+
+        Result<Prescription> result = service.add(prescription);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Please include the pill count of the prescription", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotAddWhenHourlyIntervalInvalid() {
+        Prescription prescription = makePrescription();
+        prescription.setHourlyInterval(0);
+
+        Result<Prescription> result = service.add(prescription);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Hourly interval must be at least 1 hour", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotAddWhenStartTimeInvalid() {
+        Prescription prescription = makePrescription();
+        prescription.setStartTime(null);
+
+        Result<Prescription> result = service.add(prescription);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Please select the day and time application of the medication began", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotAddWhenProductNDCInvalid() {
+        Prescription prescription = makePrescription();
+        prescription.setProductNDC(null);
+
+        Result<Prescription> result = service.add(prescription);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Please select a medication for this prescription", result.getMessages().get(0));
+    }
+
+
     private Prescription makePrescription() {
         Prescription prescription = new Prescription();
 
@@ -54,11 +132,19 @@ class PrescriptionServiceTest {
         prescription.setHourlyInterval(6);
         prescription.setPillCount(100);
         prescription.setProductNDC("0000-0000");
-        prescription.setStartTime("01/-6/2023 10:00:00");
+        prescription.setStartTime("2023-06-01 10:00:00");
+        prescription.setAppUser(makeUser());
         prescription.setDoctor(makeDoctor());
         prescription.setPharmacy(makePharmacy());
 
         return prescription;
+    }
+
+    private AppUser makeUser() {
+        AppUser user = new AppUser();
+        user.setAppUserId(1);
+
+        return user;
     }
 
     private Doctor makeDoctor() {

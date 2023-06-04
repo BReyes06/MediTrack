@@ -43,6 +43,52 @@ public class PrescriptionService {
 
 
     public Result<Prescription> add(Prescription prescription) {
-        return null;
+        Result<Prescription> result = validate(prescription);
+
+        if (!result.isSuccess()) {
+            return result;
+        }
+
+        if (prescription.getPrescriptionId() != 0) {
+            result.addMessage("Prescription Id cannot be set.", ResultType.INVALID);
+            return result;
+        }
+
+        prescription = prescriptionRepository.add(prescription);
+        result.setPayload(prescription);
+
+        return result;
+    }
+
+    private Result<Prescription> validate(Prescription prescription) {
+        Result<Prescription> result = new Result<>();
+
+        if (prescription == null) {
+            result.addMessage("Prescription must contain valid information", ResultType.INVALID);
+            return result;
+        }
+
+        if (prescription.getAppUser() == null) {
+            result.addMessage("There must be a valid user for this prescription", ResultType.INVALID);
+            return result;
+        }
+
+        if (prescription.getPillCount() <= 0) {
+            result.addMessage("Please include the pill count of the prescription", ResultType.INVALID);
+        }
+
+        if (prescription.getHourlyInterval() <= 0) {
+            result.addMessage("Hourly interval must be at least 1 hour", ResultType.INVALID);
+        }
+
+        if (prescription.getStartTime() == null) {
+            result.addMessage("Please select the day and time application of the medication began", ResultType.INVALID);
+        }
+
+        if (prescription.getProductNDC() == null) {
+            result.addMessage("Please select a medication for this prescription", ResultType.INVALID);
+        }
+
+        return result;
     }
 }

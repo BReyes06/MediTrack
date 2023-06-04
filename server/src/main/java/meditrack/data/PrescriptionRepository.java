@@ -7,6 +7,6 @@ import java.util.List;
 public interface PrescriptionRepository {
     public List<Prescription> findAllById(int appUserId);
 
-    public Prescription add();
+    public Prescription add(Prescription prescription);
 
 }
