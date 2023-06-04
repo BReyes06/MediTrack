@@ -26,6 +26,7 @@ public class SecurityConfig {
                 .antMatchers("/update_account").permitAll()
                 .antMatchers("/refresh_token").authenticated()
                 .antMatchers(HttpMethod.POST, "/authenticate").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/sms").permitAll()
                 .antMatchers(HttpMethod.GET,"/prescription/**").hasAnyAuthority("USER", "ADMIN")
                 .antMatchers(HttpMethod.POST, "/prescription/**").hasAnyAuthority("USER", "ADMIN")
                 .antMatchers(HttpMethod.PUT, "/prescription/**").hasAnyAuthority("USER", "ADMIN")
