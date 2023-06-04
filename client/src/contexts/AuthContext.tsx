@@ -1,8 +1,12 @@
 import { createContext, useState } from "react";
 
+interface AppUser {
+  app_user_id: number;
+}
+
 interface AuthContextType {
-  user: object | null;
-  login: (user: object) => void;
+  user: AppUser | null;
+  login: (user: AppUser) => void;
   logout: () => void;
 }
 
@@ -13,9 +17,9 @@ interface AuthProviderProps {
 }
 
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<object | null>(null);
+  const [user, setUser] = useState<AppUser | null>(null);
 
-  const login = (user: object) => {
+  const login = (user: AppUser) => {
     setUser(user);
   };
 
