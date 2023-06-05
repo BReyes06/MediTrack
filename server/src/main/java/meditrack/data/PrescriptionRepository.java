@@ -9,4 +9,5 @@ public interface PrescriptionRepository {
 
     public Prescription add(Prescription prescription);
 
+    boolean update(Prescription prescription);
 }

@@ -69,6 +69,14 @@ class PrescriptionJdbcTemplateRepositoryTest {
         assertTrue(actual.getPrescriptionId() >= NEXT_ID);
     }
 
+    @Test
+    void shouldUpdate() {
+        Prescription prescription = makePrescription();
+        prescription.setPrescriptionId(1);
+
+        assertTrue(repository.update(prescription));
+    }
+
     private Prescription makePrescription() {
         Prescription prescription = new Prescription();
 
