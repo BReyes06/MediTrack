@@ -27,9 +27,8 @@ public class PrescriptionService {
         this.pharmacyRepository = pharmacyRepository;
     }
 
-    public List<Prescription> findAllByUsername(String username) {
-        AppUser appUser = appUserRepository.findByUsername(username);
-        List<Prescription> prescriptions = prescriptionRepository.findAllById(appUser.getAppUserId());
+    public List<Prescription> findAllByUserId(int userId) {
+        List<Prescription> prescriptions = prescriptionRepository.findAllById(userId);
 
         for (Prescription p : prescriptions) {
             Doctor doctor = doctorRepository.findById(p.getDoctor().getDoctorId());

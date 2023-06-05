@@ -20,9 +20,9 @@ public class PrescriptionController {
         this.service = service;
     }
 
-    @GetMapping("/prescriptions/{username}")
-    public List<Prescription> findAll(@PathVariable String username) {
-        return service.findAllByUsername(username);
+    @GetMapping("/prescriptions/{userId}")
+    public List<Prescription> findAll(@PathVariable int userId) {
+        return service.findAllByUserId(userId);
     }
     
     @PostMapping

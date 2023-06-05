@@ -43,7 +43,7 @@ class PrescriptionServiceTest {
         when(doctorRepository.findById(1)).thenReturn(prescription.getDoctor());
         when(pharmacyRepository.findById(1)).thenReturn(prescription.getPharmacy());
 
-        List<Prescription> result = service.findAllByUsername("mchan");
+        List<Prescription> result = service.findAllByUserId(1);
 
         assertEquals(2, result.size());
     }
