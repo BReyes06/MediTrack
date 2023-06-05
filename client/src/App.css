@@ -49,6 +49,9 @@ body {
   margin-left: -5px;
 }
 
+.prescription-form {
+  width: 300px;
+}
 .prescription-form input,
 .prescription-form select {
   border: 2px solid black;
@@ -57,4 +60,10 @@ body {
 
 .prescription-form .form-text {
   font-weight: bold;
+}
+
+.select_med:hover {
+  text-decoration: underline;
+  font-weight: bold;
+  transition: 500ms;
 }
