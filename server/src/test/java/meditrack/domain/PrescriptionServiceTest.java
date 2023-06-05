@@ -70,7 +70,7 @@ class PrescriptionServiceTest {
     }
 
     @Test
-    void shouldNotAddWhenInvalidAppUser() {
+    void shouldNotAddWhenNullAppUser() {
         Prescription prescription = makePrescription();
         prescription.setAppUser(null);
 
@@ -124,6 +124,135 @@ class PrescriptionServiceTest {
         assertEquals("Please select a medication for this prescription", result.getMessages().get(0));
     }
 
+    @Test
+    void shouldUpdateValidPrescription() {
+        Prescription prescription = makePrescription();
+        prescription.setPrescriptionId(3);
+
+        when(prescriptionRepository.update(prescription)).thenReturn(true);
+        Result<Prescription> result = service.update(prescription);
+
+        assertEquals(ResultType.SUCCESS, result.getType());
+    }
+
+    @Test
+    void shouldNotUpdateWhenInvalidPrescriptionId() {
+        Prescription prescription = makePrescription();
+        prescription.setPrescriptionId(0);
+
+        Result<Prescription> result = service.update(prescription);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Prescription must have a valid ID", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateWhenPrescriptionNotFound() {
+        Prescription prescription = makePrescription();
+        prescription.setPrescriptionId(999);
+
+        when(prescriptionRepository.update(prescription)).thenReturn(false);
+        Result<Prescription> result = service.update(prescription);
+
+        assertEquals(ResultType.NOT_FOUND, result.getType());
+        assertEquals("Prescription 999 was not found and could not be updated.", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateWhenNullPrescription() {
+        Result<Prescription> result = service.update(null);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Prescription must contain valid information", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateWhenInvalidAppUserId() {
+        Prescription prescription = makePrescription();
+        prescription.getAppUser().setAppUserId(0);
+
+        Result<Prescription> result = service.update(prescription);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Application user must have a valid ID", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateWhenNullAppUser() {
+        Prescription prescription = makePrescription();
+        prescription.setAppUser(null);
+
+        Result<Prescription> result = service.update(prescription);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("There must be a valid user for this prescription", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateWhenInvalidPillCount() {
+        Prescription prescription = makePrescription();
+        prescription.setPillCount(0);
+
+        Result<Prescription> result = service.update(prescription);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Please include the pill count of the prescription", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateWhenInvalidHourlyInterval() {
+        Prescription prescription = makePrescription();
+        prescription.setHourlyInterval(0);
+
+        Result<Prescription> result = service.update(prescription);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Hourly interval must be at least 1 hour", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateWhenInvalidStartTime() {
+        Prescription prescription = makePrescription();
+        prescription.setStartTime(null);
+
+        Result<Prescription> result = service.update(prescription);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Please select the day and time application of the medication began", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateWhenInvalidProductNDC() {
+        Prescription prescription = makePrescription();
+        prescription.setProductNDC(null);
+
+        Result<Prescription> result = service.update(prescription);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Please select a medication for this prescription", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldDeleteValidPrescriptionId() {
+        Prescription prescription = makePrescription();
+
+        when(prescriptionRepository.deleteById(1)).thenReturn(true);
+
+        Result<Prescription> result = service.deleteById(prescription.getPrescriptionId());
+
+        assertEquals(ResultType.SUCCESS, result.getType());
+    }
+
+    @Test
+    void shouldNotDeleteInvalidPrescriptionId() {
+        Prescription prescription = makePrescription();
+        prescription.setPrescriptionId(999);
+
+        when(prescriptionRepository.deleteById(prescription.getPrescriptionId())).thenReturn(false);
+        Result<Prescription> result = service.deleteById(prescription.getPrescriptionId());
+
+        assertEquals(ResultType.NOT_FOUND, result.getType());
+    }
 
     private Prescription makePrescription() {
         Prescription prescription = new Prescription();

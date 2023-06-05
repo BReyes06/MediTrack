@@ -9,4 +9,7 @@ public interface PrescriptionRepository {
 
     public Prescription add(Prescription prescription);
 
+    boolean update(Prescription prescription);
+
+    boolean deleteById(int prescriptionId);
 }

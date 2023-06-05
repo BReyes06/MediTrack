@@ -24,7 +24,7 @@ public class PrescriptionController {
     public List<Prescription> findAll(@PathVariable int userId) {
         return service.findAllByUserId(userId);
     }
-    
+
     @PostMapping
     public ResponseEntity<?> add(@RequestBody Map<String, String> prescription) {
         Prescription toAdd = new Prescription();
@@ -41,5 +41,35 @@ public class PrescriptionController {
             return new ResponseEntity<>(result.getMessages(), HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(result.getPayload(), HttpStatus.CREATED);
+    }
+
+
+    @PutMapping("/{prescriptionId}")
+    public ResponseEntity<?> update(@RequestBody Map<String, String> prescription) {
+        Prescription toUpdate = new Prescription();
+        AppUser appUser = new AppUser();
+        appUser.setAppUserId(Integer.parseInt(prescription.get("app_user_id")));
+        toUpdate.setAppUser(appUser);
+        toUpdate.setPillCount(Integer.parseInt(prescription.get("pillCount")));
+        toUpdate.setHourlyInterval(Integer.parseInt(prescription.get("hourlyInterval")));
+        toUpdate.setProductNDC(prescription.get("product_ndc"));
+        toUpdate.setStartTime(prescription.get("startTime"));
+
+        Result<Prescription> result = service.update(toUpdate);
+
+        if (!result.isSuccess()) {
+            return new ResponseEntity<>(result.getMessages(), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("/{prescriptionId}")
+    public ResponseEntity<?> delete(@PathVariable int prescriptionId) {
+        Result<Prescription> result = service.deleteById(prescriptionId);
+
+        if (!result.isSuccess()) {
+            return new ResponseEntity<>(result.getMessages(), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

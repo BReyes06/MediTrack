@@ -4,7 +4,6 @@ import meditrack.data.AppUserRepository;
 import meditrack.data.DoctorRepository;
 import meditrack.data.PharmacyRepository;
 import meditrack.data.PrescriptionRepository;
-import meditrack.models.AppUser;
 import meditrack.models.Doctor;
 import meditrack.models.Pharmacy;
 import meditrack.models.Prescription;
@@ -55,6 +54,48 @@ public class PrescriptionService {
 
         prescription = prescriptionRepository.add(prescription);
         result.setPayload(prescription);
+
+        return result;
+    }
+
+    public Result<Prescription> update(Prescription prescription) {
+        Result<Prescription> result = validate(prescription);
+
+        if (!result.isSuccess()) {
+            return result;
+        }
+
+        if (prescription.getPrescriptionId() <= 0) {
+            result.addMessage("Prescription must have a valid ID", ResultType.INVALID);
+            return result;
+        }
+
+        if (prescription.getAppUser().getAppUserId() <= 0) {
+            result.addMessage("Application user must have a valid ID", ResultType.INVALID);
+            return result;
+        }
+
+        if (!prescriptionRepository.update(prescription)) {
+            String msg = String.format("Prescription %s was not found and could not be updated.", prescription.getPrescriptionId());
+            result.addMessage(msg, ResultType.NOT_FOUND);
+        }
+        return result;
+    }
+
+    public Result<Prescription> deleteById(int prescriptionId) {
+        Result<Prescription> result = new Result<>();
+
+        if (prescriptionId <= 0) {
+            result.addMessage("Prescription must have a valid ID", ResultType.INVALID);
+            return result;
+        }
+
+
+
+        if (!prescriptionRepository.deleteById(prescriptionId)) {
+            String msg = String.format("Prescription %s was not found and could not be deleted.", prescriptionId);
+            result.addMessage(msg, ResultType.NOT_FOUND);
+        }
 
         return result;
     }
