@@ -106,7 +106,7 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository{
     }
 
     private void updateRoles(AppUser user) {
-        jdbcTemplate.update("delete from app_user_role where app_user_id = ?;", user.getAppUserId());
+        jdbcTemplate.update("deleteById from app_user_role where app_user_id = ?;", user.getAppUserId());
 
         Collection<GrantedAuthority> authorities = user.getAuthorities();
 

@@ -72,9 +72,14 @@ class PrescriptionJdbcTemplateRepositoryTest {
     @Test
     void shouldUpdate() {
         Prescription prescription = makePrescription();
-        prescription.setPrescriptionId(1);
+        prescription.setPrescriptionId(2);
 
         assertTrue(repository.update(prescription));
+    }
+
+    @Test
+    void shouldDelete() {
+        assertTrue(repository.deleteById(1));
     }
 
     private Prescription makePrescription() {

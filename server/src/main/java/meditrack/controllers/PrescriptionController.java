@@ -44,7 +44,7 @@ public class PrescriptionController {
     }
 
 
-    @PutMapping("/update/{prescriptionId}")
+    @PutMapping("/{prescriptionId}")
     public ResponseEntity<?> update(@RequestBody Map<String, String> prescription) {
         Prescription toUpdate = new Prescription();
         AppUser appUser = new AppUser();
@@ -57,6 +57,19 @@ public class PrescriptionController {
 
         Result<Prescription> result = service.update(toUpdate);
 
-        return null;
+        if (!result.isSuccess()) {
+            return new ResponseEntity<>(result.getMessages(), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("/{prescriptionId}")
+    public ResponseEntity<?> delete(@PathVariable int prescriptionId) {
+        Result<Prescription> result = service.deleteById(prescriptionId);
+
+        if (!result.isSuccess()) {
+            return new ResponseEntity<>(result.getMessages(), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

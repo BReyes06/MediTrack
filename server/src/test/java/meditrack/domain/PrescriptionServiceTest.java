@@ -154,7 +154,7 @@ class PrescriptionServiceTest {
         when(prescriptionRepository.update(prescription)).thenReturn(false);
         Result<Prescription> result = service.update(prescription);
 
-        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals(ResultType.NOT_FOUND, result.getType());
         assertEquals("Prescription 999 was not found and could not be updated.", result.getMessages().get(0));
     }
 
@@ -232,7 +232,27 @@ class PrescriptionServiceTest {
         assertEquals("Please select a medication for this prescription", result.getMessages().get(0));
     }
 
+    @Test
+    void shouldDeleteValidPrescriptionId() {
+        Prescription prescription = makePrescription();
 
+        when(prescriptionRepository.deleteById(1)).thenReturn(true);
+
+        Result<Prescription> result = service.deleteById(prescription.getPrescriptionId());
+
+        assertEquals(ResultType.SUCCESS, result.getType());
+    }
+
+    @Test
+    void shouldNotDeleteInvalidPrescriptionId() {
+        Prescription prescription = makePrescription();
+        prescription.setPrescriptionId(999);
+
+        when(prescriptionRepository.deleteById(prescription.getPrescriptionId())).thenReturn(false);
+        Result<Prescription> result = service.deleteById(prescription.getPrescriptionId());
+
+        assertEquals(ResultType.NOT_FOUND, result.getType());
+    }
 
     private Prescription makePrescription() {
         Prescription prescription = new Prescription();

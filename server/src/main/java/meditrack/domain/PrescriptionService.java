@@ -77,8 +77,26 @@ public class PrescriptionService {
 
         if (!prescriptionRepository.update(prescription)) {
             String msg = String.format("Prescription %s was not found and could not be updated.", prescription.getPrescriptionId());
-            result.addMessage(msg, ResultType.INVALID);
+            result.addMessage(msg, ResultType.NOT_FOUND);
         }
+        return result;
+    }
+
+    public Result<Prescription> deleteById(int prescriptionId) {
+        Result<Prescription> result = new Result<>();
+
+        if (prescriptionId <= 0) {
+            result.addMessage("Prescription must have a valid ID", ResultType.INVALID);
+            return result;
+        }
+
+
+
+        if (!prescriptionRepository.deleteById(prescriptionId)) {
+            String msg = String.format("Prescription %s was not found and could not be deleted.", prescriptionId);
+            result.addMessage(msg, ResultType.NOT_FOUND);
+        }
+
         return result;
     }
 
