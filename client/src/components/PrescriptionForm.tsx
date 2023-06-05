@@ -1,35 +1,96 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
-import { getMeds } from "../services/prescriptions";
+import { useState, useContext } from "react";
+import { addPrescription, getMeds } from "../services/prescriptions";
+import { AuthContext } from "../contexts/AuthContext";
+
 type MedForm = {
   medication: string;
   hourlyInterval: number;
   pillCount: number;
-  startTime: Date;
+  startTime: string;
+  num: number;
+  product_ndc: string;
 };
 
 const INITIAL_MED: MedForm = {
   medication: "",
   hourlyInterval: 1,
   pillCount: 1,
-  startTime: new Date("2020-01-01T08:00"), // Look at this!!!
+  startTime: "",
+  num: 1,
+  product_ndc: "",
 };
-export const PrescriptionForm = () => {
+
+interface SearchResult {
+  product_ndc: string;
+  generic_name: string;
+}
+
+export const PrescriptionForm: React.FC = () => {
   const [medication, setMedication] = useState(INITIAL_MED);
-  function handleChange({
-    target: { name, value },
-  }: {
-    target: { name: string; value: string };
-  }) {
-    setMedication({ ...medication, [name]: value });
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  const [validatedMedication, setValidatedMedication] = useState(false);
+  const context = useContext(AuthContext);
+
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value, type } = event.target;
+
+    if (type === "radio") {
+      setMedication((prevMedication) => ({
+        ...prevMedication,
+        [name]: parseInt(value),
+      }));
+    } else {
+      setMedication((prevMedication) => ({
+        ...prevMedication,
+        [name]: value,
+      }));
+    }
   }
 
-  function handleMedSearch() {
-    // getMeds();
-  }
+  const resetForm = () => {
+    setMedication(INITIAL_MED);
+    setSearchResults([]);
+    setValidatedMedication(false);
+  };
+
+  const handleMedSearch = async () => {
+    const search = await getMeds(medication.medication);
+    setSearchResults(search.results);
+  };
+
+  const handleSelectMed = (event: React.MouseEvent<HTMLLIElement>) => {
+    const selectedMed = event.currentTarget.innerText;
+    const filteredSearchArray = searchResults.filter((med) => {
+      return med.generic_name === selectedMed;
+    });
+    setValidatedMedication(true);
+    setMedication({
+      ...medication,
+      medication: selectedMed,
+      product_ndc: filteredSearchArray[0]?.product_ndc,
+    });
+    setSearchResults([]);
+    const medicationInput = document.getElementById(
+      "medication"
+    ) as HTMLInputElement;
+    if (medicationInput) {
+      medicationInput.value = selectedMed;
+    }
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (validatedMedication) {
+      console.log(context?.user);
+      addPrescription(medication, context?.user!);
+      resetForm();
+    }
+  };
+
   return (
     <section className="prescription-form">
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="d-flex flex-column">
           <label htmlFor="medication" className="form-text">
             Medication Name:
@@ -39,9 +100,46 @@ export const PrescriptionForm = () => {
               type="text"
               name="medication"
               id="medication"
+              value={medication.medication}
               className="form-control med-input"
+              onChange={handleChange}
             />
-            <div className="med-btn btn btn-dark">🔎</div>
+            <div
+              className="med-btn btn btn-dark"
+              onClick={() => {
+                handleMedSearch();
+              }}
+            >
+              🔎
+            </div>
+          </div>
+          {!validatedMedication && searchResults.length === 0 ? (
+            <div className="alert alert-danger mt-2" role="alert">
+              Please verify your medication by clicking the magnifying glass and
+              selecting it.
+            </div>
+          ) : (
+            <></>
+          )}
+          <div>
+            {searchResults?.length > 0 ? (
+              <>
+                <h4>Select Medication</h4>
+                <ul className="mt-2">
+                  {searchResults.map((result) => (
+                    <li
+                      key={result.product_ndc}
+                      onClick={handleSelectMed}
+                      className="select-med"
+                    >
+                      {result.generic_name}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <></>
+            )}
           </div>
           <div className="d-flex flex-column">
             <label htmlFor="timeIntervals" className="form-text">
@@ -53,9 +151,18 @@ export const PrescriptionForm = () => {
               id="hourlyInterval"
               min="1"
               className="form-control"
+              value={medication.hourlyInterval}
+              onChange={handleChange}
             />
             <div className="d-flex justify-content-center">
-              <input type="radio" name="num" id="hours" value={1} checked />
+              <input
+                type="radio"
+                name="num"
+                id="hours"
+                value={1}
+                onChange={handleChange}
+                defaultChecked
+              />
               <label htmlFor="hours" className="mx-2 form-text">
                 Hours
               </label>
@@ -64,6 +171,7 @@ export const PrescriptionForm = () => {
                 name="num"
                 id="days"
                 value={24}
+                onChange={handleChange}
                 className="mx-2"
               />
               <label htmlFor="hours" className="form-text">
@@ -80,6 +188,8 @@ export const PrescriptionForm = () => {
               name="pillCount"
               id="pillCount"
               className="form-control"
+              value={medication.pillCount}
+              onChange={handleChange}
             />
           </div>
           <div>
@@ -91,6 +201,7 @@ export const PrescriptionForm = () => {
               name="startTime"
               id="startTime"
               className="form-control"
+              onChange={handleChange}
             />
           </div>
           <div className="mt-3 d-flex justify-content-center">
