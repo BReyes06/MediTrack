@@ -18,16 +18,10 @@ public class DoctorService {
 
 
     public Doctor findById(int doctorId) {
-        if (doctorId <= 0) {
-            return null;
-        }
         return repository.findById(doctorId);
     }
 
     public List<Doctor> findAllByUserId(int appUserId) {
-        if (appUserId <= 0) {
-            return null;
-        }
         return repository.findByAllByUserId(appUserId);
     }
 
