@@ -28,4 +28,26 @@ class DoctorJdbcTemplateRepositoryTest {
 
         assertEquals("Phillip", doctor.getFirstName());
     }
+
+    @Test
+    void shouldAdd() {
+        Doctor doctor = makeDoctor();
+        Doctor actual = repository.add(doctor, 3);
+
+        assertNotNull(actual);
+        assertEquals(actual.getDoctorId(), 4);
+    }
+
+    private Doctor makeDoctor() {
+        Doctor doctor = new Doctor();
+
+        doctor.setFirstName("Tony");
+        doctor.setMiddleName("Tony");
+        doctor.setLastName("Chopper");
+        doctor.setLocation("Thousand Sunny");
+        doctor.setPhone("1-800-tanuki");
+
+        return doctor;
+    }
+
 }

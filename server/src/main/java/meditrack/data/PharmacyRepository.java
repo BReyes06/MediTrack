@@ -6,4 +6,5 @@ public interface PharmacyRepository {
 
     public Pharmacy findById(int pharmacyId);
 
+    Pharmacy add(Pharmacy pharmacy, int prescriptionId);
 }

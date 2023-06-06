@@ -140,7 +140,8 @@ begin
      	insert into prescription(prescription_id, pill_count, hourly_interval, start_time, product_ndc, app_user_id, doctor_id, pharmacy_id)
 		values
 			(1, 30, 4, '2023-05-31 8:00:00','68788-7602-3', 1, 3, 1),
-			(2, 10, 24, '2023-05-31 8:00:00', '67877-511-38', 1, 2, 2);          
+			(2, 10, 24, '2023-05-31 8:00:00', '67877-511-38', 1, 2, 2),         
+            (3, 10, 24, '2023-05-31 8:00:00', '67877-511-38', 1, null, null); 
        
     insert into tracker(tracker_id, administration_time, prescription_id)
 		values
