@@ -115,7 +115,7 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository{
         }
 
         for (GrantedAuthority role : authorities) {
-            String sql = "insert into app_user_role (app_user_id, app_role_id) "
+            final String sql = "insert into app_user_role (app_user_id, app_role_id) "
                     + "select ?, app_role_id from app_role where `name` = ?;";
             jdbcTemplate.update(sql, user.getAppUserId(), role.getAuthority());
         }
