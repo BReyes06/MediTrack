@@ -10,6 +10,8 @@ type MedForm = {
   startTime: string;
   num: number;
   product_ndc: string;
+  prescriptionId: number;
+  app_user_id: number;
 };
 
 const INITIAL_MED: MedForm = {
@@ -19,11 +21,15 @@ const INITIAL_MED: MedForm = {
   startTime: "",
   num: 1,
   product_ndc: "",
+  prescriptionId: 0,
+  app_user_id: 0,
 };
 
 interface SearchResult {
   product_ndc: string;
   generic_name: string;
+  dosage_form: string;
+  labeler_name: string;
 }
 
 export const PrescriptionForm: React.FC = () => {
@@ -55,15 +61,14 @@ export const PrescriptionForm: React.FC = () => {
   };
 
   const handleMedSearch = async () => {
-    const search = await getMeds(medication.medication);
+    const search = await getMeds(medication?.medication);
     setSearchResults(search.results);
   };
 
-  const handleSelectMed = (event: React.MouseEvent<HTMLLIElement>) => {
-    const selectedMed = event.currentTarget.innerText;
-    const filteredSearchArray = searchResults.filter((med) => {
-      return med.generic_name === selectedMed;
-    });
+  const handleSelectMed = (selectedMed: string) => {
+    const filteredSearchArray = searchResults.filter(
+      (med) => med.generic_name === selectedMed
+    );
     setValidatedMedication(true);
     setMedication({
       ...medication,
@@ -123,20 +128,43 @@ export const PrescriptionForm: React.FC = () => {
           )}
           <div>
             {searchResults?.length > 0 ? (
-              <>
+              <section className="d-flex flex-column align-items-center">
                 <h4>Select Medication</h4>
-                <ul className="mt-2">
-                  {searchResults.map((result) => (
-                    <li
-                      key={result.product_ndc}
-                      onClick={handleSelectMed}
-                      className="select-med"
+                {searchResults.map((result) => (
+                  <div
+                    className="prescription-card d-flex flex-column align-items-center my-1"
+                    key={result.product_ndc}
+                  >
+                    <h2>{result.generic_name}</h2>
+                    {result.labeler_name ? (
+                      <>
+                        <small>
+                          <strong>Labeler Name</strong>
+                        </small>
+                        <small className="text-center">
+                          {result.labeler_name}
+                        </small>
+                      </>
+                    ) : (
+                      <></>
+                    )}
+                    <small>
+                      <strong>Product NDC</strong>
+                    </small>
+                    <small>{result.product_ndc}</small>
+                    <small>
+                      <strong>Dosage Form</strong>
+                    </small>
+                    <small>{result.dosage_form}</small>
+                    <button
+                      className="btn btn-dark mt-2"
+                      onClick={() => handleSelectMed(result.generic_name)}
                     >
-                      {result.generic_name}
-                    </li>
-                  ))}
-                </ul>
-              </>
+                      Select
+                    </button>
+                  </div>
+                ))}
+              </section>
             ) : (
               <></>
             )}

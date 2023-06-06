@@ -13,6 +13,9 @@ interface Medication {
   startTime: string;
   num: number;
   product_ndc: string;
+  prescriptionId: number;
+  app_user_id: number;
+  appUser?: object;
 }
 
 interface AppUser {
@@ -28,7 +31,7 @@ export async function addPrescription(medication: Medication, user: AppUser) {
     product_ndc: medication.product_ndc,
     app_user_id: user.app_user_id,
   };
-  console.log(finalObject);
+
   const init = {
     method: "POST",
     headers: {
@@ -49,5 +52,71 @@ export async function addPrescription(medication: Medication, user: AppUser) {
     }
   } catch (error: any) {
     console.error("Error:", error.message);
+  }
+}
+
+export async function getUserPrescriptions(userId: number) {
+  const init = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+    },
+  };
+
+  const response = await fetch(
+    `http://localhost:8080/prescription/user/${userId}`,
+    init
+  );
+
+  if (response.ok) {
+    const json = await response.json();
+    return json;
+  } else {
+    console.log("ERROR!!");
+  }
+}
+
+export async function updatePrescription(prescription: Medication) {
+  console.log(prescription);
+  delete prescription?.appUser;
+  const init = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+    },
+    body: JSON.stringify(prescription),
+  };
+
+  const response = await fetch(
+    `http://localhost:8080/prescription/${prescription.prescriptionId}`,
+    init
+  );
+
+  if (response.ok) {
+    return Promise.resolve();
+  } else {
+    const json = await response.json();
+    console.log(json);
+  }
+}
+
+export async function deletePrescription(prescriptionId: number) {
+  const init = {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+    },
+  };
+
+  const response = await fetch(
+    `http://localhost:8080/prescription/${prescriptionId}`,
+    init
+  );
+
+  if (!response.ok) {
+    const json = await response.json();
+    console.log(json);
   }
 }

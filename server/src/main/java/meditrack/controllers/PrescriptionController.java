@@ -20,7 +20,7 @@ public class PrescriptionController {
         this.service = service;
     }
 
-    @GetMapping("/prescriptions/{userId}")
+    @GetMapping("/user/{userId}")
     public List<Prescription> findAll(@PathVariable int userId) {
         return service.findAllByUserId(userId);
     }
@@ -54,17 +54,17 @@ public class PrescriptionController {
 
 
     @PutMapping("/{prescriptionId}")
-    public ResponseEntity<?> update(@PathVariable int prescriptionId, @RequestBody Map<String, String> toUpdate) {
+    public ResponseEntity<?> update(@RequestBody Map<String, String> toUpdate) {
         Prescription prescription = new Prescription();
         AppUser appUser = new AppUser();
-        appUser.setAppUserId(Integer.parseInt(toUpdate.get("app_user_id")));
-        prescription.setPrescriptionId(prescriptionId);
 
+        appUser.setAppUserId(Integer.parseInt(toUpdate.get("app_user_id")));
         prescription.setAppUser(appUser);
         prescription.setPillCount(Integer.parseInt(toUpdate.get("pillCount")));
         prescription.setHourlyInterval(Integer.parseInt(toUpdate.get("hourlyInterval")));
-        prescription.setProductNDC(toUpdate.get("product_ndc"));
+        prescription.setProductNDC(toUpdate.get("productNDC"));
         prescription.setStartTime(toUpdate.get("startTime"));
+        prescription.setPrescriptionId(Integer.parseInt(toUpdate.get("prescriptionId")));
 
         Result<Prescription> result = service.update(prescription);
 

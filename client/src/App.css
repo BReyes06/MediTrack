@@ -67,3 +67,16 @@ body {
   font-weight: bold;
   transition: 500ms;
 }
+
+.prescription-card {
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  width: 250px;
+}
+
+.card-links {
+  color: black;
+  font-weight: bold;
+}
