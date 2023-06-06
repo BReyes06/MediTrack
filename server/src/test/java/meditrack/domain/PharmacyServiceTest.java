@@ -107,7 +107,117 @@ class PharmacyServiceTest {
         assertEquals("Pharmacy must have an address", actual.getMessages().get(0));
     }
 
+    @Test
+    void shouldUpdate() {
+        Pharmacy pharmacy = makePharmacy();
+        pharmacy.setPharmacyId(1);
 
+        when(repository.update(pharmacy)).thenReturn(true);
+
+        Result<Pharmacy> result = service.update(pharmacy);
+        assertEquals(ResultType.SUCCESS, result.getType());
+    }
+
+    @Test
+    void shouldNotUpdateNullPharmacy() {
+        Result<Pharmacy> result = service.update(null);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Please enter valid information for pharmacy", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateNoPharmacyId() {
+        Pharmacy pharmacy = makePharmacy();
+        pharmacy.setPharmacyId(0);
+
+        Result<Pharmacy> result = service.update(pharmacy);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Pharmacy must have and Id", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateNonExistentPharmacyId() {
+        Pharmacy pharmacy = makePharmacy();
+        pharmacy.setPharmacyId(99);
+
+        when(repository.update(pharmacy)).thenReturn(false);
+        Result<Pharmacy> result = service.update(pharmacy);
+
+        assertEquals(ResultType.NOT_FOUND, result.getType());
+        assertEquals("Pharmacy 99 was not found", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateInvalidName() {
+        Pharmacy pharmacy = makePharmacy();
+        pharmacy.setName(null);
+
+        Result<Pharmacy> result = service.update(pharmacy);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Pharmacy must have a name", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateInvalidPhone() {
+        Pharmacy pharmacy = makePharmacy();
+        pharmacy.setPhone(null);
+
+        Result<Pharmacy> result = service.update(pharmacy);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Pharmacy must have a phone number", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateInvalidAddress() {
+        Pharmacy pharmacy = makePharmacy();
+        pharmacy.setAddress(null);
+
+        Result<Pharmacy> result = service.update(pharmacy);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Pharmacy must have an address", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldUpdateNullEmail() {
+        Pharmacy pharmacy = makePharmacy();
+        pharmacy.setPharmacyId(1);
+        pharmacy.setEmail(null);
+
+        when(repository.update(pharmacy)).thenReturn(true);
+        Result<Pharmacy> result = service.update(pharmacy);
+
+        assertEquals(ResultType.SUCCESS, result.getType());
+    }
+
+    @Test
+    void shouldDeleteById() {
+        when(repository.deleteById(1)).thenReturn(true);
+        Result<Pharmacy> result = service.deleteById(1);
+
+        assertEquals(ResultType.SUCCESS, result.getType());
+    }
+
+    @Test
+    void shouldNotDeleteNoId() {
+        Result<Pharmacy> result = service.deleteById(0);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Pharmacy must have a valid Id", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotDeleteNonExistentId() {
+        when(repository.deleteById(99)).thenReturn(false);
+        Result<Pharmacy> result = service.deleteById(99);
+
+        assertEquals(ResultType.NOT_FOUND, result.getType());
+        assertEquals("Pharmacy 99 was not found", result.getMessages().get(0));
+    }
 
 
     private Pharmacy makePharmacy() {

@@ -45,17 +45,18 @@ public class PrescriptionController {
 
 
     @PutMapping("/{prescriptionId}")
-    public ResponseEntity<?> update(@RequestBody Map<String, String> prescription) {
-        Prescription toUpdate = new Prescription();
+    public ResponseEntity<?> update(@PathVariable int prescriptionId, @RequestBody Map<String, String> toUpdate) {
+        Prescription prescription = new Prescription();
         AppUser appUser = new AppUser();
-        appUser.setAppUserId(Integer.parseInt(prescription.get("app_user_id")));
-        toUpdate.setAppUser(appUser);
-        toUpdate.setPillCount(Integer.parseInt(prescription.get("pillCount")));
-        toUpdate.setHourlyInterval(Integer.parseInt(prescription.get("hourlyInterval")));
-        toUpdate.setProductNDC(prescription.get("product_ndc"));
-        toUpdate.setStartTime(prescription.get("startTime"));
+        appUser.setAppUserId(Integer.parseInt(toUpdate.get("app_user_id")));
+        prescription.setPrescriptionId(prescriptionId);
+        prescription.setAppUser(appUser);
+        prescription.setPillCount(Integer.parseInt(toUpdate.get("pillCount")));
+        prescription.setHourlyInterval(Integer.parseInt(toUpdate.get("hourlyInterval")));
+        prescription.setProductNDC(toUpdate.get("product_ndc"));
+        prescription.setStartTime(toUpdate.get("startTime"));
 
-        Result<Prescription> result = service.update(toUpdate);
+        Result<Prescription> result = service.update(prescription);
 
         if (!result.isSuccess()) {
             return new ResponseEntity<>(result.getMessages(), HttpStatus.BAD_REQUEST);

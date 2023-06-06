@@ -46,4 +46,31 @@ public class PharmacyController {
         }
         return new ResponseEntity<>(result.getPayload(), HttpStatus.CREATED);
     }
+
+    @PutMapping("/{pharmacyId}")
+    public ResponseEntity<?> update(@PathVariable int pharmacyId, @RequestBody Map<String, String> toUpdate) {
+        Pharmacy pharmacy = new Pharmacy();
+        pharmacy.setPharmacyId(pharmacyId);
+        pharmacy.setName(toUpdate.get("name"));
+        pharmacy.setAddress(toUpdate.get("address"));
+        pharmacy.setPhone(toUpdate.get("phone"));
+        pharmacy.setEmail(toUpdate.get("email"));
+
+        Result<Pharmacy> result = service.update(pharmacy);
+
+        if (!result.isSuccess()) {
+            return new ResponseEntity<>(result.getMessages(), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("/{pharmacyId}")
+    public ResponseEntity<?> delete(@PathVariable int pharmacyId) {
+        Result<Pharmacy> result = service.deleteById(pharmacyId);
+
+        if (!result.isSuccess()) {
+            return new ResponseEntity<>(result.getMessages(), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

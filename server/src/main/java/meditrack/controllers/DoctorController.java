@@ -47,4 +47,30 @@ public class DoctorController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @PutMapping("/{doctorId}")
+    public ResponseEntity<?> update(@PathVariable int doctorId, @RequestBody Map<String, String> toUpdate) {
+        Doctor doctor = new Doctor();
+        doctor.setFirstName(toUpdate.get("firstName"));
+        doctor.setMiddleName(toUpdate.get("middleName"));
+        doctor.setLastName(toUpdate.get("lastName"));
+        doctor.setLocation(toUpdate.get("location"));
+        doctor.setPhone(toUpdate.get("phone"));
+
+        Result<Doctor> result = service.update(doctor);
+
+        if (!result.isSuccess()) {
+            return new ResponseEntity<>(result.getMessages(), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("/{doctorId}")
+    public ResponseEntity<?> deleteById(@PathVariable int doctorId) {
+        Result<Doctor> result = service.deleteById(doctorId);
+
+        if (!result.isSuccess()) {
+            return new ResponseEntity<>(result.getMessages(), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

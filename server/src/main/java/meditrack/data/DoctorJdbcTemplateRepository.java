@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -60,6 +61,32 @@ public class DoctorJdbcTemplateRepository implements DoctorRepository{
         updatePrescription(doctor.getDoctorId(), prescriptionId);
 
         return doctor;
+    }
+
+    @Override
+    public boolean update(Doctor doctor) {
+        final String sql = "update doctor set "
+                + "first_name = ?, "
+                + "middle_name = ?, "
+                + "last_name = ?, "
+                + "location = ?, "
+                + "phone = ? "
+                + "where doctor_id = ?;";
+
+        return jdbcTemplate.update(sql,
+                doctor.getFirstName(),
+                doctor.getMiddleName() == null ? null : doctor.getMiddleName(),
+                doctor.getLastName(),
+                doctor.getLocation(),
+                doctor.getPhone(),
+                doctor.getDoctorId()) > 0;
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteById(int doctorId) {
+        jdbcTemplate.update("update prescription set doctor_id = ? where doctor_id = ?;", null, doctorId);
+        return jdbcTemplate.update("delete from doctor where doctor_id = ?;", doctorId) > 0;
     }
 
     private void updatePrescription(int doctorId, int prescriptionId) {

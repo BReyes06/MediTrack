@@ -48,23 +48,18 @@ class AppUserJdbcTemplateRepositoryTest {
 
     @Test
     void shouldUpdate() {
-        AppUser marvis = repository.findByUsername("mchan");
-
-        assertEquals(1, marvis.getAppUserId());
-        assertEquals("Marvis", marvis.getFirstName());
-        assertEquals("mchan@email.com", marvis.getEmail());
-
         AppUser user = makeUser();
-        user.setAppUserId(1);
+        user.setAppUserId(2);
+        user.setFirstName("Dukey");
+        user.setEmail("dt@test.com");
 
         assertTrue(repository.update(user));
 
-        AppUser result = repository.findByUsername("jtest");
+        AppUser result = repository.findByUsername("breyes");
 
-        assertEquals(1, result.getAppUserId());
-        assertEquals("Johnny", result.getFirstName());
-        assertEquals("jt@test.com", result.getEmail());
-
+        assertEquals(2, result.getAppUserId());
+        assertEquals("Dukey", result.getFirstName());
+        assertEquals("dt@test.com", result.getEmail());
     }
 
     private AppUser makeUser() {

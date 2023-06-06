@@ -44,6 +44,40 @@ public class DoctorService {
         return result;
     }
 
+    public Result<Doctor> update(Doctor doctor) {
+        Result<Doctor> result = validate(doctor);
+
+        if (!result.isSuccess()) {
+            return result;
+        }
+
+        if (doctor.getDoctorId() <= 0) {
+            result.addMessage("Doctor must have an Id", ResultType.INVALID);
+        }
+
+        if (!repository.update(doctor)) {
+            String msg = String.format("Doctor %s was not found", doctor.getDoctorId());
+            result.addMessage(msg, ResultType.NOT_FOUND);
+        }
+
+        return result;
+    }
+
+    public Result<Doctor> deleteById(int doctorId) {
+        Result<Doctor> result = new Result<>();
+        if (doctorId <= 0) {
+            result.addMessage("Doctor must have an Id", ResultType.INVALID);
+            return result;
+        }
+
+        if (!repository.deleteById(doctorId)) {
+            String msg = String.format("Doctor %s was not found", doctorId);
+            result.addMessage(msg, ResultType.NOT_FOUND);
+        }
+
+        return result;
+    }
+
     private Result<Doctor> validate(Doctor doctor) {
         Result<Doctor> result = new Result<>();
 

@@ -113,6 +113,116 @@ class DoctorServiceTest {
         assertEquals("Doctor must have an location/address", result.getMessages().get(0));
     }
 
+    @Test
+    void shouldUpdate() {
+        Doctor doctor = makeDoctor();
+        doctor.setDoctorId(1);
+
+        when(repository.update(doctor)).thenReturn(true);
+        Result<Doctor> result = service.update(doctor);
+
+        assertEquals(ResultType.SUCCESS, result.getType());
+    }
+
+    @Test
+    void shouldNotUpdateWithoutDoctorId() {
+        Doctor doctor = makeDoctor();
+        doctor.setDoctorId(-1);
+
+        Result<Doctor> result = service.update(doctor);
+
+        assertEquals(ResultType.NOT_FOUND, result.getType());
+        assertEquals("Doctor must have an Id", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateNullDoctor() {
+        Result<Doctor> result = service.update(null);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Please enter valid information for doctor", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateNonExistentDoctorId() {
+        Doctor doctor = makeDoctor();
+        doctor.setDoctorId(99);
+
+        when(repository.update(doctor)).thenReturn(false);
+        Result<Doctor> result = service.update(doctor);
+
+        assertEquals(ResultType.NOT_FOUND, result.getType());
+        assertEquals("Doctor 99 was not found", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateNullFirstName() {
+        Doctor doctor = makeDoctor();
+        doctor.setFirstName(null);
+
+        Result<Doctor> result = service.update(doctor);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Doctor must have a first name", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateNullLastName() {
+        Doctor doctor = makeDoctor();
+        doctor.setLastName(null);
+
+        Result<Doctor> result = service.update(doctor);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Doctor must have a last name", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateNullPhone() {
+        Doctor doctor = makeDoctor();
+        doctor.setPhone(null);
+
+        Result<Doctor> result = service.update(doctor);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Doctor must have a phone number", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateNullLocation() {
+        Doctor doctor = makeDoctor();
+        doctor.setLocation(null);
+
+        Result<Doctor> result = service.update(doctor);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Doctor must have an location/address", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldDelete() {
+        when(repository.deleteById(1)).thenReturn(true);
+        Result<Doctor> result = service.deleteById(1);
+
+        assertEquals(ResultType.SUCCESS, result.getType());
+    }
+
+    @Test
+    void shouldNotDeleteInvalidDoctorId() {
+        Result<Doctor> result = service.deleteById(-1);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("Doctor must have an Id", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotDeleteNonExistentDoctorId() {
+        when(repository.deleteById(99)).thenReturn(false);
+        Result<Doctor> result = service.deleteById(99);
+
+        assertEquals(ResultType.NOT_FOUND, result.getType());
+        assertEquals("Doctor 99 was not found", result.getMessages().get(0));
+    }
 
     private Doctor makeDoctor() {
         Doctor doctor = new Doctor();
