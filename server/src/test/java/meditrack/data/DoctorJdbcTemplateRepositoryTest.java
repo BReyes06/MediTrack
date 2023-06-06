@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -27,6 +29,13 @@ class DoctorJdbcTemplateRepositoryTest {
         Doctor doctor = repository.findById(1);
 
         assertEquals("Phillip", doctor.getFirstName());
+    }
+
+    @Test
+    void shouldFindAllByUseId() {
+        List<Doctor> result = repository.findByAllByUserId(1);
+
+        assertEquals(2, result.size());
     }
 
     @Test

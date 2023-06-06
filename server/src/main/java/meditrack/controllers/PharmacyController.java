@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -27,6 +28,11 @@ public class PharmacyController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(pharmacy, HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{appUserId}")
+    public List<Pharmacy> findAllByAppUserId(@PathVariable int appUserId) {
+        return service.findAllByAppUserId(appUserId);
     }
 
     @PostMapping

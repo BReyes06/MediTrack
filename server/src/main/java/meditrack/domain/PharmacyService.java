@@ -4,6 +4,8 @@ import meditrack.data.PharmacyRepository;
 import meditrack.models.Pharmacy;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PharmacyService {
 
@@ -41,6 +43,13 @@ public class PharmacyService {
         );
 
         return result;
+    }
+
+    public List<Pharmacy> findAllByAppUserId(int appUserId) {
+        if (appUserId <= 0) {
+            return null;
+        }
+        return repository.findAllByAppUserId(appUserId);
     }
 
     public Result<Pharmacy> update(Pharmacy pharmacy) {
