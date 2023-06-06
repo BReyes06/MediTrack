@@ -2,7 +2,10 @@ package meditrack.domain;
 
 import meditrack.data.DoctorRepository;
 import meditrack.models.Doctor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class DoctorService {
@@ -19,6 +22,13 @@ public class DoctorService {
             return null;
         }
         return repository.findById(doctorId);
+    }
+
+    public List<Doctor> findAllByUserId(int appUserId) {
+        if (appUserId <= 0) {
+            return null;
+        }
+        return repository.findByAllByUserId(appUserId);
     }
 
     public Result<Doctor> add(Doctor doctor, int prescriptionId) {

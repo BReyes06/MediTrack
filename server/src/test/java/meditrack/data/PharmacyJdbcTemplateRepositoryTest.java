@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -30,12 +32,19 @@ class PharmacyJdbcTemplateRepositoryTest {
     }
 
     @Test
+    void shouldFindAllByUserId() {
+        List<Pharmacy> result = repository.findAllByAppUserId(1);
+
+        assertEquals(result.size(), 3);
+    }
+
+    @Test
     void shouldAdd() {
         Pharmacy pharmacy = makePharmacy();
         Pharmacy actual = repository.add(pharmacy, 3);
 
         assertNotNull(actual);
-        assertEquals(actual.getPharmacyId(), 6);
+        assertEquals(actual.getPharmacyId(), 4);
     }
 
     @Test

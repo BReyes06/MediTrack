@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Types;
+import java.util.List;
 
 @Repository
 public class PharmacyJdbcTemplateRepository implements PharmacyRepository {
@@ -28,6 +29,18 @@ public class PharmacyJdbcTemplateRepository implements PharmacyRepository {
                 + "where pharmacy_id = ?";
         return jdbcTemplate.query(sql, new PharmacyMapper(), pharmacyId).stream()
                 .findFirst().orElse(null);
+    }
+
+    @Override
+    public List<Pharmacy> findAllByAppUserId(int appUserId) {
+        final String sql = "select p.pharmacy_id, p.`name`, p.email, p.phone, p.address "
+                + "from pharmacy p "
+                + "inner join prescription pr on p.pharmacy_id = pr.pharmacy_id "
+                + "inner join app_user au on pr.app_user_id = au.app_user_id "
+                + "where au.app_user_id = ?;";
+
+        return jdbcTemplate.query(sql, new PharmacyMapper(), appUserId);
+
     }
 
     @Override
