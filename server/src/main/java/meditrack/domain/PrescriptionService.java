@@ -39,6 +39,26 @@ public class PrescriptionService {
         return prescriptions;
     }
 
+    public Prescription findById(int prescriptionId) {
+        Prescription prescription = prescriptionRepository.findById(prescriptionId);
+
+        if (prescription != null) {
+            if (prescription.getDoctor() != null) {
+                prescription.setDoctor(
+                        doctorRepository.findById(prescription.getDoctor().getDoctorId())
+                );
+            }
+
+            if (prescription.getPharmacy() != null) {
+                prescription.setPharmacy(
+                        pharmacyRepository.findById(prescription.getPharmacy().getPharmacyId())
+                );
+            }
+        }
+
+        return prescription;
+    }
+
 
     public Result<Prescription> add(Prescription prescription) {
         Result<Prescription> result = validate(prescription);

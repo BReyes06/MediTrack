@@ -25,6 +25,15 @@ public class PrescriptionController {
         return service.findAllByUserId(userId);
     }
 
+    @GetMapping("/{prescriptionId}")
+    public ResponseEntity<?> findById(@PathVariable int prescriptionId) {
+        Prescription result = service.findById(prescriptionId);
+        if (result == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<?> add(@RequestBody Map<String, String> prescription) {
         Prescription toAdd = new Prescription();
@@ -50,6 +59,7 @@ public class PrescriptionController {
         AppUser appUser = new AppUser();
         appUser.setAppUserId(Integer.parseInt(toUpdate.get("app_user_id")));
         prescription.setPrescriptionId(prescriptionId);
+
         prescription.setAppUser(appUser);
         prescription.setPillCount(Integer.parseInt(toUpdate.get("pillCount")));
         prescription.setHourlyInterval(Integer.parseInt(toUpdate.get("hourlyInterval")));

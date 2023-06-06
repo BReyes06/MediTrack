@@ -36,6 +36,18 @@ public class PrescriptionJdbcTemplateRepository implements PrescriptionRepositor
 
     @Override
     @Transactional
+    public Prescription findById(int prescriptionId) {
+        final String sql = "select prescription_id, pill_count, hourly_interval, start_time, product_ndc, app_user_id, doctor_id, pharmacy_id "
+                + "from prescription "
+                + "where prescription_id = ?;";
+        Prescription prescription = jdbcTemplate.query(sql, new PrescriptionMapper(), prescriptionId).stream()
+                .findFirst().orElse(null);
+
+        return prescription;
+    }
+
+    @Override
+    @Transactional
     public Prescription add(Prescription prescription) {
         final String sql = "insert into prescription (pill_count, hourly_interval, start_time, product_ndc, app_user_id, doctor_id, pharmacy_id) "
                 + "values (?, ?, ?, ?, ?, ?, ?);";
