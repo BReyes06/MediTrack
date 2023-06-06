@@ -90,8 +90,6 @@ public class PrescriptionService {
             return result;
         }
 
-
-
         if (!prescriptionRepository.deleteById(prescriptionId)) {
             String msg = String.format("Prescription %s was not found and could not be deleted.", prescriptionId);
             result.addMessage(msg, ResultType.NOT_FOUND);

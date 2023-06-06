@@ -38,6 +38,19 @@ class DoctorJdbcTemplateRepositoryTest {
         assertEquals(actual.getDoctorId(), 4);
     }
 
+    @Test
+    void shouldUpdate() {
+        Doctor doctor = makeDoctor();
+        doctor.setDoctorId(2);
+
+        assertTrue(repository.update(doctor));
+    }
+
+    @Test
+    void shouldDelete() {
+        assertTrue(repository.deleteById(3));
+    }
+
     private Doctor makeDoctor() {
         Doctor doctor = new Doctor();
 

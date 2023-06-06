@@ -62,11 +62,35 @@ public class PharmacyJdbcTemplateRepository implements PharmacyRepository {
         return pharmacy;
     }
 
+    @Override
+    public boolean update(Pharmacy pharmacy) {
+        final String sql = "update pharmacy set "
+                + "`name` = ?, "
+                + "email = ?, "
+                + "phone = ?, "
+                + "address = ? "
+                + "where pharmacy_id = ?;";
+
+        return jdbcTemplate.update(sql,
+                pharmacy.getName(),
+                pharmacy.getEmail() != null ? pharmacy.getEmail() : null,
+                pharmacy.getPhone(),
+                pharmacy.getAddress(),
+                pharmacy.getPharmacyId()) > 0;
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteById(int pharmacyId) {
+        jdbcTemplate.update("update prescription set pharmacy_id = ? where pharmacy_id = ?;", null, pharmacyId);
+        return jdbcTemplate.update("delete from pharmacy where pharmacy_id = ?;", pharmacyId) > 0;
+    }
+
     private void updatePrescription(int pharmacyId, int prescriptionId) {
         final String sql = "update prescription set "
                 + "pharmacy_id = ? "
                 + "where prescription_id = ?;";
-        jdbcTemplate.update(sql, pharmacyId, prescriptionId);
-
+        jdbcTemplate.update(sql, pharmacyId, prescriptionId
+        );
     }
 }

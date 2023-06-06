@@ -72,21 +72,21 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository{
     @Transactional
     public boolean update(AppUser user) {
         final String sql = "update app_user set "
+                + "first_name = ?, "
                 + "middle_name = ?, "
                 + "last_name = ?, "
                 + "email = ?, "
                 + "phone = ?, "
-                + "username = ?, "
                 + "password_hash = ?, "
                 + "enabled = ? "
                 + "where app_user_id = ?;";
 
         if (jdbcTemplate.update(sql,
+                user.getFirstName(),
                 user.getMiddleName(),
                 user.getLastName(),
                 user.getEmail(),
                 user.getPhone(),
-                user.getUsername(),
                 user.getPassword(),
                 user.isEnabled(),
                 user.getAppUserId()) > 0) {
@@ -106,7 +106,7 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository{
     }
 
     private void updateRoles(AppUser user) {
-        jdbcTemplate.update("deleteById from app_user_role where app_user_id = ?;", user.getAppUserId());
+        jdbcTemplate.update("delete from app_user_role where app_user_id = ?;", user.getAppUserId());
 
         Collection<GrantedAuthority> authorities = user.getAuthorities();
 

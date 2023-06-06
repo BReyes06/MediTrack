@@ -43,6 +43,42 @@ public class PharmacyService {
         return result;
     }
 
+    public Result<Pharmacy> update(Pharmacy pharmacy) {
+        Result<Pharmacy> result = validate(pharmacy);
+        if (!result.isSuccess()) {
+            return result;
+        }
+
+        if (pharmacy.getPharmacyId() <= 0) {
+            result.addMessage("Pharmacy must have and Id", ResultType.INVALID);
+            return result;
+        }
+
+        if (!repository.update(pharmacy)) {
+            String msg = String.format("Pharmacy %s was not found", pharmacy.getPharmacyId());
+            result.addMessage(msg, ResultType.NOT_FOUND);
+        }
+
+        return result;
+
+    }
+
+    public Result<Pharmacy> deleteById(int pharmacyId) {
+        Result<Pharmacy> result = new Result<>();
+        if (pharmacyId <= 0) {
+            result.addMessage("Pharmacy must have a valid Id", ResultType.INVALID);
+            return result;
+        }
+
+        if (!repository.deleteById(pharmacyId)) {
+            String msg = String.format("Pharmacy %s was not found", pharmacyId);
+            result.addMessage(msg, ResultType.NOT_FOUND);
+            return result;
+        }
+
+        return result;
+    }
+
     private Result<Pharmacy> validate(Pharmacy pharmacy) {
         Result<Pharmacy> result = new Result<>();
 

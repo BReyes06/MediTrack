@@ -147,7 +147,7 @@ class PrescriptionServiceTest {
     }
 
     @Test
-    void shouldNotUpdateWhenPrescriptionNotFound() {
+    void shouldNotUpdateNonExistentPrescriptionId() {
         Prescription prescription = makePrescription();
         prescription.setPrescriptionId(999);
 
@@ -244,7 +244,7 @@ class PrescriptionServiceTest {
     }
 
     @Test
-    void shouldNotDeleteInvalidPrescriptionId() {
+    void shouldNotDeleteNonExistentPrescriptionId() {
         Prescription prescription = makePrescription();
         prescription.setPrescriptionId(999);
 

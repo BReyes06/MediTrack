@@ -35,8 +35,22 @@ class PharmacyJdbcTemplateRepositoryTest {
         Pharmacy actual = repository.add(pharmacy, 3);
 
         assertNotNull(actual);
-        assertEquals(actual.getPharmacyId(), 4);
+        assertEquals(actual.getPharmacyId(), 6);
     }
+
+    @Test
+    void shouldUpdate() {
+        Pharmacy pharmacy = makePharmacy();
+        pharmacy.setPharmacyId(2);
+
+        assertTrue(repository.update(pharmacy));
+    }
+
+    @Test
+    void shouldDelete() {
+        assertTrue(repository.deleteById(3));
+    }
+
     private Pharmacy makePharmacy() {
         Pharmacy pharmacy = new Pharmacy();
 

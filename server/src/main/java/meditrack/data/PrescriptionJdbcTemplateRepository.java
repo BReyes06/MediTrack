@@ -79,7 +79,6 @@ public class PrescriptionJdbcTemplateRepository implements PrescriptionRepositor
     }
 
     @Override
-    @Transactional
     public boolean update(Prescription prescription) {
         final String sql = "update prescription set "
                 + "pill_count = ?, "
@@ -89,24 +88,20 @@ public class PrescriptionJdbcTemplateRepository implements PrescriptionRepositor
                 + "app_user_id = ? "
                 + "where prescription_id = ?;";
 
-
-        if (jdbcTemplate.update(sql,
+        return jdbcTemplate.update(sql,
                 prescription.getPillCount(),
                 prescription.getHourlyInterval(),
                 prescription.getStartTime(),
                 prescription.getProductNDC(),
                 prescription.getAppUser().getAppUserId(),
-                prescription.getPrescriptionId()) > 0) {
-            return true;
-        }
-        return false;
+                prescription.getPrescriptionId()) > 0;
     }
 
     @Override
     @Transactional
     public boolean deleteById(int prescriptionId) {
-        jdbcTemplate.update("deleteById from tracker where prescription_id = ?;", prescriptionId);
-        return jdbcTemplate.update("deleteById from prescription where prescription_id = ?;", prescriptionId) > 0;
+        jdbcTemplate.update("delete from tracker where prescription_id = ?;", prescriptionId);
+        return jdbcTemplate.update("delete from prescription where prescription_id = ?;", prescriptionId) > 0;
     }
 
     private Doctor addDoctor(Doctor doctor) {
