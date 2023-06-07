@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.DELETE, "/prescription/**").hasAnyAuthority("USER","ADMIN")
                 .antMatchers(HttpMethod.GET,"/pharmacy/**").hasAnyAuthority("USER", "ADMIN")
                 .antMatchers(HttpMethod.POST, "/pharmacy/**").hasAnyAuthority("USER", "ADMIN")
-                .antMatchers(HttpMethod.PUT, "pharmacy/**").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers(HttpMethod.PUT, "/pharmacy/**").hasAnyAuthority("USER", "ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/pharmacy/**").hasAnyAuthority("USER","ADMIN")
                 .antMatchers(HttpMethod.GET,"/doctor/**").hasAnyAuthority("USER", "ADMIN")
                 .antMatchers(HttpMethod.POST, "/doctor/**").hasAnyAuthority("USER", "ADMIN")

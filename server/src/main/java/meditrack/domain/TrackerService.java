@@ -43,8 +43,6 @@ public class TrackerService {
         );
         result.setPayload(trackerRepository.add(tracker));
 
-
-
         return result;
     }
 
@@ -85,6 +83,7 @@ public class TrackerService {
 
         if (tracker == null) {
             result.addMessage("Please include valid tracker information", ResultType.INVALID);
+            return result;
         }
 
         if (tracker.getPrescriptionId() <= 0) {

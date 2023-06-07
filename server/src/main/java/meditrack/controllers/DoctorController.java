@@ -56,6 +56,7 @@ public class DoctorController {
     @PutMapping("/{doctorId}")
     public ResponseEntity<?> update(@PathVariable int doctorId, @RequestBody Map<String, String> toUpdate) {
         Doctor doctor = new Doctor();
+        doctor.setDoctorId(doctorId);
         doctor.setFirstName(toUpdate.get("firstName"));
         doctor.setMiddleName(toUpdate.get("middleName"));
         doctor.setLastName(toUpdate.get("lastName"));

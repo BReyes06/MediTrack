@@ -1,0 +1,16 @@
+@url = http://localhost:8080
+
+@token = eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtZWRpdHJhY2siLCJzdWIiOiJtY2hhbiIsImFwcF91c2VyX2lkIjoxLCJhdXRob3JpdGllcyI6IlVTRVIiLCJleHAiOjE2ODYwODYwMjB9.gQ_DJCuoBQook78v78ElB52IsRKrUEQ_RNxJ7vlZALg
+
+@phoneNumber = 
+
+###
+
+# POST: Should sent textSms
+POST {{url}}/api/sms HTTP/1.1
+Content-Type: application/json
+
+{
+    "phone": "{{phoneNumber}}",
+    "message": "REMINDER: Please remember to take X medications at 11:00"
+}
