@@ -1,7 +1,9 @@
 package meditrack.data;
 
 import meditrack.data.mappers.AppUserMapper;
+import meditrack.data.mappers.PrescriptionMapper;
 import meditrack.models.AppUser;
+import meditrack.models.Prescription;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -14,6 +16,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class AppUserJdbcTemplateRepository implements AppUserRepository{
@@ -117,8 +120,17 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository{
     @Override
     @Transactional
     public boolean deleteById(int appUserId) {
+        final String sql = "select prescription_id, pill_count, hourly_interval, start_time, product_ndc, app_user_id, doctor_id, pharmacy_id "
+                + "from prescription "
+                + "where app_user_id = ?;";
+        List<Prescription> prescriptionList = jdbcTemplate.query(sql, new PrescriptionMapper(), appUserId);
 
+        prescriptionList.forEach(prescription -> {
+            int prescriptionId = prescription.getPrescriptionId();
 
+            jdbcTemplate.update("delete from tracker where prescription_id = ?;", prescriptionId);
+            jdbcTemplate.update("delete from prescription where prescription_id = ?;", prescriptionId);
+        });
 
         jdbcTemplate.update("delete from app_user_role where app_user_id = ?;", appUserId);
         return jdbcTemplate.update("delete from app_user where app_user_id = ?;", appUserId) > 0;
