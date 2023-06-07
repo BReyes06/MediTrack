@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import {
   getUserPrescriptions,
   updatePrescription,
@@ -31,6 +31,7 @@ export const EditPrescriptionForm: React.FC = () => {
     product_ndc: "",
   });
   const { prescriptionId } = useParams();
+  const navigate = useNavigate();
   const context = useContext(AuthContext);
 
   function handleChange({
@@ -47,6 +48,7 @@ export const EditPrescriptionForm: React.FC = () => {
       ...prescription,
       app_user_id: context!.user!.app_user_id,
     });
+    navigate("/prescriptions");
   }
 
   useEffect(() => {

@@ -32,9 +32,16 @@ const PrescriptionCard: React.FC<PrescriptionProps> = ({ prescription }) => {
         <strong>Dosage Form</strong>
       </small>
       <small>{firstResult?.dosage_form}</small>
+      <small>
+        <strong>Pill Count</strong>
+      </small>
+      <small>{prescription.pillCount}</small>
       <div className="d-flex">
         <small>
-          <Link to="/doctor" className="mx-2 card-links">
+          <Link
+            to={`/doctor/${prescription.prescriptionId}`}
+            className="mx-2 card-links"
+          >
             Doctor
           </Link>
         </small>
@@ -44,7 +51,10 @@ const PrescriptionCard: React.FC<PrescriptionProps> = ({ prescription }) => {
           </Link>
         </small>
       </div>
-      <Link to="/tracker" className="btn btn-dark w-75 mt-1">
+      <Link
+        to={`/tracker/${prescription.prescriptionId}`}
+        className="btn btn-dark w-75 mt-1"
+      >
         Track
       </Link>
       <div className="d-flex mt-2">

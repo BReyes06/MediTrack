@@ -13,6 +13,10 @@ import { NotFound } from "./components/NotFound";
 import { EditPrescriptionForm } from "./components/EditPrescriptionForm";
 import { PrescriptionForm } from "./components/PrescriptionForm";
 import { DeletePrescription } from "./components/DeletePrescription";
+import { Tracker } from "./components/Trackers";
+import { DoctorInfo } from "./components/DoctorInfo";
+import { DoctorForm } from "./components/DoctorForm";
+import { EditDoctorForm } from "./components/EditDoctorForm";
 
 import { refresh } from "./services/auth";
 
@@ -51,6 +55,14 @@ const App: React.FC = () => {
             <Route path="/prescriptions" element={<Prescriptions />} />
             <Route path="/prescriptions/add" element={<PrescriptionForm />} />
             <Route
+              path="/doctors/add/:prescriptionId"
+              element={<DoctorForm />}
+            />
+            <Route
+              path="/doctors/edit/:doctorId"
+              element={<EditDoctorForm />}
+            />
+            <Route
               path="/edit/:prescriptionId"
               element={<EditPrescriptionForm />}
             />
@@ -58,6 +70,8 @@ const App: React.FC = () => {
               path="/delete/:prescriptionId"
               element={<DeletePrescription />}
             />
+            <Route path="/tracker/:prescriptionId" element={<Tracker />} />
+            <Route path="/doctor/:prescriptionId" element={<DoctorInfo />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
