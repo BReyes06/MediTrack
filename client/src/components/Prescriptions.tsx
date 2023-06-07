@@ -61,7 +61,7 @@ export const Prescriptions = () => {
   return (
     <section className="prescriptions d-flex flex-column align-items-center">
       {prescriptions.length <= 0 ? (
-        <h1>You have no registered prescriptions.</h1>
+        <h1 className="text-center">You have no registered prescriptions.</h1>
       ) : (
         <>
           {prescriptions.map((prescription) => {

@@ -74,9 +74,30 @@ body {
   border-radius: 0.5rem;
   padding: 1rem;
   width: 250px;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
 }
 
 .card-links {
   color: black;
   font-weight: bold;
+}
+
+.even {
+  background-color: grey;
+  padding: 1rem;
+  color: black;
+}
+
+.even,
+.odd {
+  margin: none;
+  width: 100%;
+}
+
+.doctor-card {
+  background-color: white;
+  border: 1px solid black;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
 }

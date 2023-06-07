@@ -1,0 +1,20 @@
+@url = http://localhost:8080
+@token = eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtZWRpdHJhY2siLCJzdWIiOiJicmV5ZXMiLCJhcHBfdXNlcl9pZCI6MiwiYXV0aG9yaXRpZXMiOiJBRE1JTiIsImV4cCI6MTY4NjA3MjA3Nn0.o_R-J-IixEhigb7d9dFx5jZaEl81Xoswto3IbIyM93k
+PUT {{url}}/prescription/5 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "prescriptionId": 5,
+    "hourlyInterval": "11",
+    "pillCount": 10,
+    "startTime": "2023-05-30 11:35:00",
+    "productNDC": "50580-100",
+    "doctor": null,
+    "pharmacy": null,
+    "app_user_id": 2
+}
+
+###
+GET {{url}}/prescription/prescriptions/2 HTTP/1.1
+Authorization: Bearer {{token}}

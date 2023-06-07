@@ -15,6 +15,8 @@ interface Medication {
   product_ndc: string;
   prescriptionId: number;
   app_user_id: number;
+  doctor?: object;
+  pharmacy?: object;
   appUser?: object;
 }
 
@@ -80,6 +82,9 @@ export async function getUserPrescriptions(userId: number) {
 export async function updatePrescription(prescription: Medication) {
   console.log(prescription);
   delete prescription?.appUser;
+  delete prescription?.doctor;
+  delete prescription?.pharmacy;
+
   const init = {
     method: "PUT",
     headers: {
