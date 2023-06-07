@@ -1,0 +1,4 @@
+@url = http://localhost:8080
+@token = eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtZWRpdHJhY2siLCJzdWIiOiJicmV5ZXMiLCJhcHBfdXNlcl9pZCI6MiwiYXV0aG9yaXRpZXMiOiJBRE1JTiIsImV4cCI6MTY4NjA4NDUxNn0.dyYFxM91FBfUSU5BXZEutZsAewmAGBEa9UDYUkS88_0
+GET {{url}}/doctor/user/2 HTTP/1.1
+Authorization: Bearer {{token}}

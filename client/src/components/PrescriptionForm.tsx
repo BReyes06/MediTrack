@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState, useContext } from "react";
 import { addPrescription, getMeds } from "../services/prescriptions";
 import { AuthContext } from "../contexts/AuthContext";
@@ -37,6 +37,7 @@ export const PrescriptionForm: React.FC = () => {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [validatedMedication, setValidatedMedication] = useState(false);
   const context = useContext(AuthContext);
+  const navigate = useNavigate();
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, value, type } = event.target;
@@ -90,6 +91,7 @@ export const PrescriptionForm: React.FC = () => {
       console.log(context?.user);
       addPrescription(medication, context?.user!);
       resetForm();
+      navigate("/prescriptions");
     }
   };
 
