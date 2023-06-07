@@ -46,7 +46,10 @@ const PrescriptionCard: React.FC<PrescriptionProps> = ({ prescription }) => {
           </Link>
         </small>
         <small>
-          <Link to="/pharmacy" className="mx-2 card-links">
+          <Link
+            to={`/pharmacy/${prescription.prescriptionId}`}
+            className="mx-2 card-links"
+          >
             Pharmacy
           </Link>
         </small>

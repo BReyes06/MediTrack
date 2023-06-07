@@ -64,7 +64,7 @@ public class PrescriptionController {
         prescription.setAppUser(appUser);
         prescription.setPillCount(Integer.parseInt(toUpdate.get("pillCount")));
         prescription.setHourlyInterval(Integer.parseInt(toUpdate.get("hourlyInterval")));
-        prescription.setProductNDC(toUpdate.get("product_ndc"));
+        prescription.setProductNDC(toUpdate.get("productNDC"));
         prescription.setStartTime(toUpdate.get("startTime"));
         prescription.setPrescriptionId(Integer.parseInt(toUpdate.get("prescriptionId")));
 

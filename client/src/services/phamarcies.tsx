@@ -1,19 +1,18 @@
-const API_URL = "http://localhost:8080/api/doctor";
+const API_URL = "http://localhost:8080/api/pharmacy";
 
-interface Doctor {
-  firstName: string;
-  middleName: string;
-  lastName: string;
-  location: string;
-  phone: number;
-  doctorId: number;
+interface Pharmacy {
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  prescriptionId: number;
+  pharmacyId: number;
 }
 
-export async function getDoctors(userId: number) {
+export async function getPharmaciesByUser(userId: number) {
   const init = {
     method: "GET",
     headers: {
-      "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("jwt")}`,
     },
   };
@@ -23,10 +22,12 @@ export async function getDoctors(userId: number) {
   if (response.ok) {
     const json = await response.json();
     return json;
+  } else {
+    return Promise.reject();
   }
 }
 
-export async function getDoctor(doctorId: string) {
+export async function getPharmacy(pharmacyId: string) {
   const init = {
     method: "GET",
     headers: {
@@ -36,42 +37,24 @@ export async function getDoctor(doctorId: string) {
   };
 
   const response = await fetch(
-    `http://localhost:8080/api/doctor/${doctorId}`,
+    `http://localhost:8080/api/pharmacy/${pharmacyId}`,
     init
   );
   const json = await response.json();
   return json;
 }
 
-export async function addDoctor(doctor: Doctor) {
+export async function addPharmacy(pharmacy: Pharmacy) {
   const init = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("jwt")}`,
     },
-    body: JSON.stringify(doctor),
-  };
-  const response = await fetch("http://localhost:8080/api/doctor", init);
-
-  if (response.ok) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-export async function updateDoctor(doctor: Doctor) {
-  const init = {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-    },
-    body: JSON.stringify(doctor),
+    body: JSON.stringify(pharmacy),
   };
 
-  const response = await fetch(`${API_URL}/${doctor.doctorId}`, init);
+  const response = await fetch(API_URL, init);
 
   if (response.ok) {
     return Promise.resolve();
@@ -80,7 +63,26 @@ export async function updateDoctor(doctor: Doctor) {
   }
 }
 
-export async function deleteDoctor(doctorId: number) {
+export async function updatePharmacy(pharmacy: Pharmacy) {
+  const init = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+    },
+    body: JSON.stringify(pharmacy),
+  };
+
+  const response = await fetch(`${API_URL}/${pharmacy.pharmacyId}`, init);
+
+  if (response.ok) {
+    return Promise.resolve();
+  } else {
+    return Promise.reject();
+  }
+}
+
+export async function deletePharmacy(pharmacyId: number) {
   const init = {
     method: "DELETE",
     headers: {
@@ -88,7 +90,7 @@ export async function deleteDoctor(doctorId: number) {
     },
   };
 
-  const response = await fetch(`${API_URL}/${doctorId}`, init);
+  const response = await fetch(`${API_URL}/${pharmacyId}`, init);
 
   if (response.ok) {
     return Promise.resolve();

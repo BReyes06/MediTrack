@@ -44,7 +44,10 @@ export async function addPrescription(medication: Medication, user: AppUser) {
   };
 
   try {
-    const response = await fetch("http://localhost:8080/prescription", init);
+    const response = await fetch(
+      "http://localhost:8080/api/prescription",
+      init
+    );
 
     if (response.ok) {
       const json = await response.json();
@@ -65,9 +68,8 @@ export async function getUserPrescriptions(userId: number) {
       Authorization: `Bearer ${localStorage.getItem("jwt")}`,
     },
   };
-
   const response = await fetch(
-    `http://localhost:8080/prescription/user/${userId}`,
+    `http://localhost:8080/api/prescription/user/${userId}`,
     init
   );
 
@@ -95,7 +97,7 @@ export async function updatePrescription(prescription: Medication) {
   };
 
   const response = await fetch(
-    `http://localhost:8080/prescription/${prescription.prescriptionId}`,
+    `http://localhost:8080/api/prescription/${prescription.prescriptionId}`,
     init
   );
 
@@ -116,7 +118,7 @@ export async function deletePrescription(prescriptionId: number) {
   };
 
   const response = await fetch(
-    `http://localhost:8080/prescription/${prescriptionId}`,
+    `http://localhost:8080/api/prescription/${prescriptionId}`,
     init
   );
 

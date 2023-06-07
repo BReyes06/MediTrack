@@ -88,7 +88,6 @@ export const PrescriptionForm: React.FC = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (validatedMedication) {
-      console.log(context?.user);
       addPrescription(medication, context?.user!);
       resetForm();
       navigate("/prescriptions");

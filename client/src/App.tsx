@@ -17,8 +17,13 @@ import { Tracker } from "./components/Trackers";
 import { DoctorInfo } from "./components/DoctorInfo";
 import { DoctorForm } from "./components/DoctorForm";
 import { EditDoctorForm } from "./components/EditDoctorForm";
+import { DeleteDoctor } from "./components/DeleteDoctor";
+import { PharmacyInfo } from "./components/PharmacyInfo";
+import { PharmacyAddForm } from "./components/PharmacyAddForm";
+import { PharmacyEditForm } from "./components/PharmacyEditForm";
 
 import { refresh } from "./services/auth";
+import { DeletePharmacy } from "./components/DeletePharmacy";
 
 const App: React.FC = () => {
   const [restoreLoginAttemptCompleted, setRestoreLoginAttemptCompleted] =
@@ -61,6 +66,26 @@ const App: React.FC = () => {
             <Route
               path="/doctors/edit/:doctorId"
               element={<EditDoctorForm />}
+            />
+            <Route
+              path="/doctors/delete/:doctorId"
+              element={<DeleteDoctor />}
+            />
+            <Route
+              path="/pharmacy/:prescriptionId"
+              element={<PharmacyInfo />}
+            />
+            <Route
+              path="/pharmacies/add/:prescriptionId"
+              element={<PharmacyAddForm />}
+            />
+            <Route
+              path="/pharmacies/edit/:pharmacyId"
+              element={<PharmacyEditForm />}
+            />
+            <Route
+              path="/pharmacies/delete/:pharmacyId"
+              element={<DeletePharmacy />}
             />
             <Route
               path="/edit/:prescriptionId"
