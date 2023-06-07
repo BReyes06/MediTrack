@@ -113,7 +113,9 @@ begin
 	insert into app_user (first_name, middle_name, last_name, email, phone, username, password_hash, enabled)
 		values
 			('Marvis','', 'Chan', 'mchan@email.com', '1-111-111-1111', 'mchan', '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnYrtQQi8Z3IZzQa', 1),
-			('Bernanrdo','Reyes', 'Badilla', 'breyes@email.com', '1-222-222-2222', 'breyes', '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnYrtQQi8Z3IZzQa', 1);
+			('Bernanrdo','Reyes', 'Badilla', 'breyes@email.com', '1-222-222-2222', 'breyes', '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnYrtQQi8Z3IZzQa', 1),
+			('Joe','Irina', 'Esin', 'instructor@email.com', '1-000-000-0000', 'instructor', '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnYrtQQi8Z3IZzQa', 1);
+
 
 	insert into app_role (`name`) 
 		values
@@ -123,7 +125,8 @@ begin
     insert into app_user_role
 		values
 			(1, 1),
-			(2, 2);
+			(2, 2),
+            (3, 1);
 	
 	insert into pharmacy(pharmacy_id,`name`, email, phone, address)
 		values

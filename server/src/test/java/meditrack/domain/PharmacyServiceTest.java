@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
@@ -28,6 +31,19 @@ class PharmacyServiceTest {
 
         assertNotNull(actual);
         assertEquals(pharmacy, actual);
+    }
+
+    @Test
+    void shouldFindAllByUserId() {
+        List<Pharmacy> pharmacyList = new ArrayList<>();
+        pharmacyList.add(makePharmacy());
+        pharmacyList.add(makePharmacy());
+
+        when(repository.findAllByAppUserId(1)).thenReturn(pharmacyList);
+
+        List<Pharmacy> actual = service.findAllByAppUserId(1);
+
+        assertEquals(2, pharmacyList.size());
     }
 
     @Test

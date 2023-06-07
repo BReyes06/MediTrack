@@ -1,20 +1,66 @@
-@url = http://localhost:8080
-@token = eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtZWRpdHJhY2siLCJzdWIiOiJicmV5ZXMiLCJhcHBfdXNlcl9pZCI6MiwiYXV0aG9yaXRpZXMiOiJBRE1JTiIsImV4cCI6MTY4NjA3MjA3Nn0.o_R-J-IixEhigb7d9dFx5jZaEl81Xoswto3IbIyM93k
-PUT {{url}}/prescription/5 HTTP/1.1
+@url = http://localhost:8080/api
+
+@token = eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtZWRpdHJhY2siLCJzdWIiOiJtY2hhbiIsImFwcF91c2VyX2lkIjoxLCJhdXRob3JpdGllcyI6IlVTRVIiLCJleHAiOjE2ODYxNTEzMjV9.HKut4CeapRQESoknSYMSp-IgE-1n14dg0Whltc8x6rM
+
+### 
+
+# Exists here to get token
+POST http://localhost:8080/authenticate HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "mchan",
+    "password": "P@ssw0rd!"
+}
+
+###
+
+# GET: Should get prescriptions by User Id
+GET {{url}}/prescription/user/1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
+# GET: Should get prescription by Id
+GET {{url}}/prescription/1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
+# POST: Should add prescription
+POST {{url}}/prescription HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-    "prescriptionId": 5,
-    "hourlyInterval": "11",
-    "pillCount": 10,
-    "startTime": "2023-05-30 11:35:00",
-    "productNDC": "50580-100",
-    "doctor": null,
-    "pharmacy": null,
-    "app_user_id": 2
+    "pillCount": "15",
+    "hourlyInterval": "4",
+    "product_ndc": "00000-7602-4",
+    "startTime": "2023-05-31 10:00:00",
+    "app_user_id": "1"
 }
 
 ###
-GET {{url}}/prescription/prescriptions/2 HTTP/1.1
+
+# PUT: Should update prescription
+PUT {{url}}/prescription/3 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "pillCount": "5000",
+    "hourlyInterval": "235",
+    "product_ndc": "00000-0000-0",
+    "startTime": "2023-05-31 10:00:00",
+    "app_user_id": "1",
+    "prescriptionId": 3
+}
+
+### 
+
+# DELETE: Should delete prescription
+DELETE {{url}}/prescription/3 HTTP/1.1
+Content-Type: application/json
 Authorization: Bearer {{token}}

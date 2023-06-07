@@ -1,8 +1,6 @@
 package meditrack.domain;
 
-import meditrack.data.AppUserRepository;
-import meditrack.domain.Result;
-import meditrack.domain.ResultType;
+import meditrack.data.*;
 import meditrack.models.AppUser;
 import meditrack.security.AppUserService;
 import org.junit.jupiter.api.Test;
@@ -11,7 +9,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DuplicateKeyException;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -23,16 +23,40 @@ class AppUserServiceTest {
     AppUserService service;
 
     @MockBean
-    AppUserRepository repository;
+    AppUserRepository appUserRepository;
+
+    @MockBean
+    PrescriptionRepository prescriptionRepository;
+
+    @MockBean
+    PharmacyRepository pharmacyRepository;
+
+    @MockBean
+    TrackerRepository trackerRepository;
+
+    @MockBean
+    DoctorRepository doctorRepository;
 
     @Test
     void shouldFindJohnny() {
         AppUser johnny = makeUser();
 
-        when(repository.findByUsername("jtest")).thenReturn(johnny);
+        when(appUserRepository.findByUsername("jtest")).thenReturn(johnny);
 
         AppUser actual = (AppUser) service.loadUserByUsername("jtest");
         assertEquals(johnny, actual);
+    }
+
+    @Test
+    void shouldFindAll() {
+        List<AppUser> expected = new ArrayList<>();
+        expected.add(makeUser());
+        expected.add(makeUser());
+
+        when(appUserRepository.findAll()).thenReturn(expected);
+        List<AppUser> result = service.findAll();
+
+        assertEquals(2, result.size());
     }
 
     @Test
@@ -42,7 +66,7 @@ class AppUserServiceTest {
         AppUser appUser = makeUser();
         appUser.setAppUserId(0);
 
-        when(repository.create(appUser)).thenReturn(expected);
+        when(appUserRepository.create(appUser)).thenReturn(expected);
         Result<AppUser> result = service.create(appUser);
 
 
@@ -73,7 +97,7 @@ class AppUserServiceTest {
         AppUser appUser = makeUser();
         DuplicateKeyException error = new DuplicateKeyException("");
 
-        when(repository.create(appUser)).thenThrow(error);
+        when(appUserRepository.create(appUser)).thenThrow(error);
         Result<AppUser> result = service.create(appUser);
 
         assertEquals(ResultType.INVALID, result.getType());
@@ -184,7 +208,7 @@ class AppUserServiceTest {
     void shouldUpdate() {
         AppUser user = makeUser();
 
-        when(repository.update(user)).thenReturn(true);
+        when(appUserRepository.update(user)).thenReturn(true);
         Result<AppUser> result = service.update(user);
 
         assertEquals(ResultType.SUCCESS, result.getType());
@@ -212,7 +236,7 @@ class AppUserServiceTest {
         AppUser user = makeUser();
         user.setAppUserId(999);
 
-        when(repository.update(user)).thenReturn(false);
+        when(appUserRepository.update(user)).thenReturn(false);
         Result<AppUser> result = service.update(user);
 
         assertEquals(ResultType.NOT_FOUND, result.getType());
@@ -327,6 +351,62 @@ class AppUserServiceTest {
         assertEquals(ResultType.INVALID, result.getType());
         assertEquals("Phone number is required", result.getMessages().get(0));
     }
+
+    @Test
+    void shouldDelete() {
+        when(appUserRepository.findById(1)).thenReturn(makeUser());
+        when(appUserRepository.deleteById(1)).thenReturn(true);
+        when(prescriptionRepository.findAllById(1)).thenReturn(new ArrayList<>());
+        when(trackerRepository.findAllByPrescriptionId(1)).thenReturn(new ArrayList<>());
+        when(trackerRepository.deleteById(1)).thenReturn(true);
+        when(doctorRepository.findByAllByUserId(1)).thenReturn(new ArrayList<>());
+        when(doctorRepository.deleteById(1)).thenReturn(true);
+        when(pharmacyRepository.findAllByAppUserId(1)).thenReturn(new ArrayList<>());
+        when(pharmacyRepository.deleteById(1)).thenReturn(true);
+        when(prescriptionRepository.deleteById(1)).thenReturn(true);
+
+
+        Result<AppUser> result = service.deleteById(1);
+        assertEquals(ResultType.SUCCESS, result.getType());
+    }
+
+    @Test
+    void shouldNotDeleteInvalidId() {
+        when(appUserRepository.findById(-1)).thenReturn(null);
+        Result<AppUser> result = service.deleteById(-1);
+
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("User must have an Id", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotDeleteNonExistentId() {
+        when(appUserRepository.findById(99)).thenReturn(null);
+        Result<AppUser> result = service.deleteById(99);
+
+        assertEquals(ResultType.NOT_FOUND, result.getType());
+        assertEquals("User 99 not found", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotDeleteIfDeleteByIdFailed() {
+        when(appUserRepository.findById(1)).thenReturn(makeUser());
+        when(prescriptionRepository.findAllById(1)).thenReturn(new ArrayList<>());
+        when(trackerRepository.findAllByPrescriptionId(1)).thenReturn(new ArrayList<>());
+        when(trackerRepository.deleteById(1)).thenReturn(true);
+        when(doctorRepository.findByAllByUserId(1)).thenReturn(new ArrayList<>());
+        when(doctorRepository.deleteById(1)).thenReturn(true);
+        when(pharmacyRepository.findAllByAppUserId(1)).thenReturn(new ArrayList<>());
+        when(pharmacyRepository.deleteById(1)).thenReturn(true);
+        when(prescriptionRepository.deleteById(1)).thenReturn(true);
+        when(appUserRepository.deleteById(1)).thenReturn(false);
+
+        Result<AppUser> result = service.deleteById(1);
+
+        assertEquals(ResultType.NOT_FOUND, result.getType());
+        assertEquals("Error occurred while deleting user, please try again", result.getMessages().get(0));
+    }
+
 
     private AppUser makeUser() {
         AppUser user = new AppUser();

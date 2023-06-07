@@ -16,10 +16,11 @@ public class PharmacyService {
     }
 
     public Pharmacy findById(int pharmacyId) {
-        if (pharmacyId <= 0) {
-            return null;
-        }
         return repository.findById(pharmacyId);
+    }
+
+    public List<Pharmacy> findAllByAppUserId(int appUserId) {
+        return repository.findAllByAppUserId(appUserId);
     }
 
     public Result<Pharmacy> add(Pharmacy pharmacy, int prescriptionId) {
@@ -43,13 +44,6 @@ public class PharmacyService {
         );
 
         return result;
-    }
-
-    public List<Pharmacy> findAllByAppUserId(int appUserId) {
-        if (appUserId <= 0) {
-            return null;
-        }
-        return repository.findAllByAppUserId(appUserId);
     }
 
     public Result<Pharmacy> update(Pharmacy pharmacy) {

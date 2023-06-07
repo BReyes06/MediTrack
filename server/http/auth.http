@@ -1,6 +1,8 @@
 @url = http://localhost:8080
 
-### 
+@token = eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtZWRpdHJhY2siLCJzdWIiOiJicmV5ZXMiLCJhcHBfdXNlcl9pZCI6MiwiYXV0aG9yaXRpZXMiOiJBRE1JTiIsImV4cCI6MTY4NjE1NTE3NX0.BORYerwQvcd952iQIecHR0VTUILSp-QA5p8Gl0iYyxY
+
+###
 
 # POST: Should create token for existing user 
 POST {{url}}/authenticate HTTP/1.1
@@ -12,10 +14,57 @@ Content-Type: application/json
 }
 
 ###
-# POST: Should create a user.
+
+# POST: Should refresh token.
 POST {{url}}/refresh_token HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtZWRpdHJhY2siLCJzdWIiOiJicmV5ZXMiLCJhcHBfdXNlcl9pZCI6MiwiYXV0aG9yaXRpZXMiOiJBRE1JTiIsImV4cCI6MTY4NTY1MjEyNH0.GWo6BCYyQgVKvBTMevFBDs0CNHRe4ZfCJRVtSyjzsw0
-
+Authorization: Bearer {{token}}
 
 ###
+
+# POST: Should create account
+POST {{url}}/create_account HTTP/1.1
+Content-Type: application/json
+
+{
+    "username" : "test",
+    "password" : "P@ssw0rd!",
+    "firstName" : "Dukey",
+    "middleName" : "",
+    "lastName" : "Test",
+    "email" : "jt@test.com",
+    "phone" : "1-800-test"
+}
+
+###
+
+# PUT: Should update account
+PUT {{url}}/update_account HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "appUserId": 3,
+    "username" : "test",
+    "password" : "P@ssw0rd!",
+    "firstName" : "Johnny",
+    "middleName" : "",
+    "lastName" : "Test",
+    "email" : "jt@test.com",
+    "phone" : "1-800-test"
+}
+
+
+### 
+
+# GET: ADMIN should find all users 
+GET {{url}}/all_users HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### 
+
+# DELETE: ADMIN should delete user
+DELETE {{url}}/delete_account/1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}

@@ -1,0 +1,67 @@
+@url = http://localhost:8080/api
+
+@token = eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtZWRpdHJhY2siLCJzdWIiOiJtY2hhbiIsImFwcF91c2VyX2lkIjoxLCJhdXRob3JpdGllcyI6IlVTRVIiLCJleHAiOjE2ODYxNTUwNDV9.-jK1BBrLq-DgNr2oPh3vNJHYS2Exqhg2EYJ12vY2QHk
+
+### 
+
+# Exists here to get token
+POST http://localhost:8080/authenticate HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "mchan",
+    "password": "P@ssw0rd!"
+}
+
+###
+
+# GET: Should find doctor by Id
+GET {{url}}/doctor/1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
+# GET: Should find all doctors by User Id
+GET {{url}}/doctor/user/1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
+# POST: Should add a doctor
+POST {{url}}/doctor HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "firstName" : "Test",
+    "middleName" : "T",
+    "lastName" : "Tester",
+    "location" : "Tested Street",
+    "phone" : "Tester Phone",
+    "prescriptionId" : 1
+}
+
+### 
+
+# PUT: Should update a doctor
+PUT {{url}}/doctor/1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "firstName" : "Testeeee",
+    "middleName" : "",
+    "lastName" : "Testeeeee",
+    "location" : "Tested Street",
+    "phone" : "Tester Phone",
+    "prescriptionId" : 1
+}
+
+###
+
+# DELETE: Should delete a doctor
+DELETE {{url}}/doctor/4 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}

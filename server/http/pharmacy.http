@@ -1,0 +1,65 @@
+@url = http://localhost:8080/api
+
+@token = eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtZWRpdHJhY2siLCJzdWIiOiJtY2hhbiIsImFwcF91c2VyX2lkIjoxLCJhdXRob3JpdGllcyI6IlVTRVIiLCJleHAiOjE2ODYxNTI2ODd9.VIWlVJiOS7Vnrcf6Rcn_CKy4i_oBQNZDlaZhPG14bwk
+
+### 
+
+# Exists here to get token
+POST http://localhost:8080/authenticate HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "mchan",
+    "password": "P@ssw0rd!"
+}
+
+### 
+
+# GET: Should find by Id
+GET {{url}}/pharmacy/1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
+# GET: Should get all by User Id
+GET {{url}}/pharmacy/user/1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
+# POST: Should create a pharmacy
+POST {{url}}/pharmacy HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "Test Pharma",
+    "email": "test.email.com",
+    "phone": "Test Phone",
+    "address": "123 Test St",
+    "prescriptionId": 1
+}
+
+###
+
+# PUT: Should update a pharmacy
+PUT {{url}}/pharmacy/5 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "Tested Pharmacy",
+    "email": "test.email.com",
+    "phone": "Test Phone",
+    "address": "456 Test St",
+    "prescriptionId": 1
+}
+
+###
+
+# DELETE: Should delete a pharmacy
+DELETE {{url}}/pharmacy/4 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}

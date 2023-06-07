@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/doctor")
+@RequestMapping("/api/doctor")
 public class DoctorController {
 
     private final DoctorService service;
@@ -56,6 +56,7 @@ public class DoctorController {
     @PutMapping("/{doctorId}")
     public ResponseEntity<?> update(@PathVariable int doctorId, @RequestBody Map<String, String> toUpdate) {
         Doctor doctor = new Doctor();
+        doctor.setDoctorId(doctorId);
         doctor.setFirstName(toUpdate.get("firstName"));
         doctor.setMiddleName(toUpdate.get("middleName"));
         doctor.setLastName(toUpdate.get("lastName"));

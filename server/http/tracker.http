@@ -1,0 +1,62 @@
+@url = http://localhost:8080/api
+
+@token = eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtZWRpdHJhY2siLCJzdWIiOiJtY2hhbiIsImFwcF91c2VyX2lkIjoxLCJhdXRob3JpdGllcyI6IlVTRVIiLCJleHAiOjE2ODYxNTI3NTR9.1RBS7ecKbx9lDg4GpEffffkWwlFoHOUCALBu8tFXyvE
+
+### 
+
+# Exists here to get token
+POST http://localhost:8080/authenticate HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "mchan",
+    "password": "P@ssw0rd!"
+}
+
+
+###
+
+# GET: Should get Trackers by prescriptionId
+GET {{url}}/tracker/prescription/1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+### 
+
+# GET: Should get Trackers by prescriptionId
+GET {{url}}/tracker/1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### 
+
+# POST: Should get Add a Tracker
+POST {{url}}/tracker HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "administrationTime" : "2023-05-31 16:45:00",
+    "prescriptionId" : 1
+}
+
+### 
+
+# PUT: Should get Update a Tracker
+PUT {{url}}/tracker/5 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "trackerId" : 5,
+    "administrationTime" : "2023-05-29 16:45:00",
+    "prescriptionId" : 1
+}
+
+### 
+
+# DELETE: Should get DELETE a Tracker
+DELETE {{url}}/tracker/5 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}

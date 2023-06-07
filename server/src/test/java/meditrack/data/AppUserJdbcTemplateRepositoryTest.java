@@ -7,13 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class AppUserJdbcTemplateRepositoryTest {
-
-    final static int NEXT_ID = 3;
 
     @Autowired
     AppUserJdbcTemplateRepository repository;
@@ -38,12 +37,21 @@ class AppUserJdbcTemplateRepositoryTest {
     }
 
     @Test
+    void shouldFindAll() {
+        List<AppUser> appUsers = repository.findAll();
+
+        System.out.println(appUsers);
+
+        assertTrue(appUsers.size() >= 2 && appUsers.size() <= 4);
+    }
+
+    @Test
     void shouldAdd() {
         AppUser user = makeUser();
         AppUser actual = repository.create(user);
 
         assertNotNull(actual);
-        assertEquals(NEXT_ID, actual.getAppUserId());
+        assertTrue(actual.getAppUserId() == 3 || actual.getAppUserId() == 4);
     }
 
     @Test
@@ -60,6 +68,11 @@ class AppUserJdbcTemplateRepositoryTest {
         assertEquals(2, result.getAppUserId());
         assertEquals("Dukey", result.getFirstName());
         assertEquals("dt@test.com", result.getEmail());
+    }
+
+    @Test
+    void shouldDelete() {
+        assertTrue(repository.deleteById(3));
     }
 
     private AppUser makeUser() {

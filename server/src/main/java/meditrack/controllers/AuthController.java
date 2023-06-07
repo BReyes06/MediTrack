@@ -14,12 +14,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -34,6 +32,12 @@ public class AuthController {
         this.jwtConverter = jwtConverter;
         this.appUserService = appUserService;
     }
+
+    @GetMapping("/all_users")
+    public List<AppUser> findAll() {
+        return appUserService.findAll();
+    }
+
 
     @PostMapping("/authenticate")
     public ResponseEntity<Map<String, String>> authenticate(@RequestBody Map<String, String> credentials) {
@@ -124,5 +128,15 @@ public class AuthController {
         map.put("appUserId", result.getPayload().getAppUserId());
 
         return new ResponseEntity<>(map, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete_account/{appUserId}")
+    public ResponseEntity<?> deleteAccount(@PathVariable int appUserId) {
+        Result<AppUser> result = appUserService.deleteById(appUserId);
+
+        if (!result.isSuccess()) {
+            return new ResponseEntity<>(result.getMessages(), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
