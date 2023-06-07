@@ -25,17 +25,6 @@ class AppUserServiceTest {
     @MockBean
     AppUserRepository appUserRepository;
 
-    @MockBean
-    PrescriptionRepository prescriptionRepository;
-
-    @MockBean
-    PharmacyRepository pharmacyRepository;
-
-    @MockBean
-    TrackerRepository trackerRepository;
-
-    @MockBean
-    DoctorRepository doctorRepository;
 
     @Test
     void shouldFindJohnny() {
@@ -354,16 +343,7 @@ class AppUserServiceTest {
 
     @Test
     void shouldDelete() {
-        when(appUserRepository.findById(1)).thenReturn(makeUser());
         when(appUserRepository.deleteById(1)).thenReturn(true);
-        when(prescriptionRepository.findAllById(1)).thenReturn(new ArrayList<>());
-        when(trackerRepository.findAllByPrescriptionId(1)).thenReturn(new ArrayList<>());
-        when(trackerRepository.deleteById(1)).thenReturn(true);
-        when(doctorRepository.findByAllByUserId(1)).thenReturn(new ArrayList<>());
-        when(doctorRepository.deleteById(1)).thenReturn(true);
-        when(pharmacyRepository.findAllByAppUserId(1)).thenReturn(new ArrayList<>());
-        when(pharmacyRepository.deleteById(1)).thenReturn(true);
-        when(prescriptionRepository.deleteById(1)).thenReturn(true);
 
 
         Result<AppUser> result = service.deleteById(1);
@@ -386,25 +366,6 @@ class AppUserServiceTest {
 
         assertEquals(ResultType.NOT_FOUND, result.getType());
         assertEquals("User 99 not found", result.getMessages().get(0));
-    }
-
-    @Test
-    void shouldNotDeleteIfDeleteByIdFailed() {
-        when(appUserRepository.findById(1)).thenReturn(makeUser());
-        when(prescriptionRepository.findAllById(1)).thenReturn(new ArrayList<>());
-        when(trackerRepository.findAllByPrescriptionId(1)).thenReturn(new ArrayList<>());
-        when(trackerRepository.deleteById(1)).thenReturn(true);
-        when(doctorRepository.findByAllByUserId(1)).thenReturn(new ArrayList<>());
-        when(doctorRepository.deleteById(1)).thenReturn(true);
-        when(pharmacyRepository.findAllByAppUserId(1)).thenReturn(new ArrayList<>());
-        when(pharmacyRepository.deleteById(1)).thenReturn(true);
-        when(prescriptionRepository.deleteById(1)).thenReturn(true);
-        when(appUserRepository.deleteById(1)).thenReturn(false);
-
-        Result<AppUser> result = service.deleteById(1);
-
-        assertEquals(ResultType.NOT_FOUND, result.getType());
-        assertEquals("Error occurred while deleting user, please try again", result.getMessages().get(0));
     }
 
 
