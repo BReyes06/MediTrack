@@ -1,15 +1,15 @@
 @url = http://localhost:8080
 
-@token = eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtZWRpdHJhY2siLCJzdWIiOiJtY2hhbiIsImFwcF91c2VyX2lkIjoxLCJhdXRob3JpdGllcyI6IlVTRVIiLCJleHAiOjE2ODYxMDg5NTh9.MSS69Xy8xNieM9ez1ouGUqPraNSH67V4jX6itqTg4sk
+@token = eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtZWRpdHJhY2siLCJzdWIiOiJicmV5ZXMiLCJhcHBfdXNlcl9pZCI6MiwiYXV0aG9yaXRpZXMiOiJBRE1JTiIsImV4cCI6MTY4NjE1NTE3NX0.BORYerwQvcd952iQIecHR0VTUILSp-QA5p8Gl0iYyxY
 
-### 
+###
 
 # POST: Should create token for existing user 
 POST {{url}}/authenticate HTTP/1.1
 Content-Type: application/json
 
 {
-    "username": "mchan",
+    "username": "breyes",
     "password": "P@ssw0rd!"
 }
 
@@ -29,7 +29,7 @@ Content-Type: application/json
 {
     "username" : "test",
     "password" : "P@ssw0rd!",
-    "firstName" : "Johnny",
+    "firstName" : "Dukey",
     "middleName" : "",
     "lastName" : "Test",
     "email" : "jt@test.com",
@@ -47,10 +47,24 @@ Authorization: Bearer {{token}}
     "appUserId": 3,
     "username" : "test",
     "password" : "P@ssw0rd!",
-    "firstName" : "Dukey",
+    "firstName" : "Johnny",
     "middleName" : "",
     "lastName" : "Test",
     "email" : "jt@test.com",
     "phone" : "1-800-test"
 }
 
+
+### 
+
+# GET: ADMIN should find all users 
+GET {{url}}/all_users HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### 
+
+# DELETE: ADMIN should delete user
+DELETE {{url}}/delete_account/1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}

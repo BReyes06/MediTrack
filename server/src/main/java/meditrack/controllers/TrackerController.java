@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/tracker")
+@RequestMapping("/api/tracker")
 public class TrackerController {
 
     private final TrackerService service;

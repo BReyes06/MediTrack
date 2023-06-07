@@ -1,11 +1,11 @@
-@url = http://localhost:8080
+@url = http://localhost:8080/api
 
-@token = eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtZWRpdHJhY2siLCJzdWIiOiJtY2hhbiIsImFwcF91c2VyX2lkIjoxLCJhdXRob3JpdGllcyI6IlVTRVIiLCJleHAiOjE2ODYxMTA1OTN9.ukzyZna-dgmc-duiLoWBEdy6_MmwFdeH5K3RFmz3aWw
+@token = eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtZWRpdHJhY2siLCJzdWIiOiJtY2hhbiIsImFwcF91c2VyX2lkIjoxLCJhdXRob3JpdGllcyI6IlVTRVIiLCJleHAiOjE2ODYxNTI2ODd9.VIWlVJiOS7Vnrcf6Rcn_CKy4i_oBQNZDlaZhPG14bwk
 
 ### 
 
 # Exists here to get token
-POST {{url}}/authenticate HTTP/1.1
+POST http://localhost:8080/authenticate HTTP/1.1
 Content-Type: application/json
 
 {

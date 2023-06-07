@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -39,7 +40,25 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository{
     }
 
     @Override
-    @Transactional
+    public AppUser findById(int appUserId) {
+        return jdbcTemplate.query("select app_user_id, first_name, middle_name, last_name, email, phone, username, password_hash, enabled "
+                + "from app_user "
+                + "where app_user_id = ?;", new AppUserMapper(new ArrayList<>()), appUserId).stream().findFirst().orElse(null);
+    }
+
+    @Override
+    public List<AppUser> findAll() {
+        List<AppUser> appUsers = jdbcTemplate.query("select app_user_id, first_name, middle_name, last_name, email, phone, username, password_hash, enabled "
+                        + "from app_user ", new AppUserMapper(new ArrayList<>()));
+
+        for (AppUser appUser : appUsers) {
+            appUser.setAuthorities(getRolesByUsername(appUser.getUsername()));
+        }
+
+        return appUsers;
+    }
+
+    @Override
     public AppUser create(AppUser user) {
         final String sql = "insert into app_user (first_name, middle_name, last_name, email, phone, username, password_hash) "
                 + "values (?, ?, ?, ?, ?, ?, ?);";
@@ -69,7 +88,6 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository{
     }
 
     @Override
-    @Transactional
     public boolean update(AppUser user) {
         final String sql = "update app_user set "
                 + "first_name = ?, "
@@ -94,6 +112,16 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository{
             return true;
         }
         return false;
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteById(int appUserId) {
+
+
+
+        jdbcTemplate.update("delete from app_user_role where app_user_id = ?;", appUserId);
+        return jdbcTemplate.update("delete from app_user where app_user_id = ?;", appUserId) > 0;
     }
 
     private List<String> getRolesByUsername(String username) {

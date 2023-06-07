@@ -1,9 +1,9 @@
 package meditrack.security;
 
-import meditrack.data.AppUserRepository;
+import meditrack.data.*;
 import meditrack.domain.Result;
 import meditrack.domain.ResultType;
-import meditrack.models.AppUser;
+import meditrack.models.*;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,23 +16,40 @@ import java.util.List;
 @Service
 public class AppUserService implements UserDetailsService {
 
-    private final AppUserRepository repository;
+    private final AppUserRepository appUserRepository;
+    private final PrescriptionRepository prescriptionRepository;
+    private final DoctorRepository doctorRepository;
+    private final PharmacyRepository pharmacyRepository;
+    private final TrackerRepository trackerRepository;
     private final PasswordEncoder encoder;
 
-    public AppUserService(AppUserRepository repository, PasswordEncoder encoder) {
-        this.repository = repository;
+    public AppUserService(AppUserRepository repository,
+                          PrescriptionRepository prescriptionRepository,
+                          DoctorRepository doctorRepository,
+                          PharmacyRepository pharmacyRepository,
+                          TrackerRepository trackerRepository,
+                          PasswordEncoder encoder) {
+        this.appUserRepository = repository;
+        this.prescriptionRepository = prescriptionRepository;
+        this.doctorRepository = doctorRepository;
+        this.pharmacyRepository = pharmacyRepository;
+        this.trackerRepository = trackerRepository;
         this.encoder = encoder;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        AppUser appUser = repository.findByUsername(username);
+        AppUser appUser = appUserRepository.findByUsername(username);
 
         if (appUser == null || !appUser.isEnabled()) {
             throw new UsernameNotFoundException(username + " not found");
         }
 
         return appUser;
+    }
+
+    public List<AppUser> findAll() {
+        return appUserRepository.findAll();
     }
 
     public Result<AppUser> create(AppUser user) {
@@ -49,7 +66,7 @@ public class AppUserService implements UserDetailsService {
 
 
         try {
-            user = repository.create(user);
+            user = appUserRepository.create(user);
             result.setPayload(user);
         } catch (DuplicateKeyException e) {
             result.addMessage("Username already exists, please try again", ResultType.INVALID);
@@ -74,7 +91,7 @@ public class AppUserService implements UserDetailsService {
         user.setEnabled(true);
         user.setAuthorities(List.of("USER"));
 
-        if (!repository.update(user)) {
+        if (!appUserRepository.update(user)) {
             String msg = String.format("User %s was not found and could not be updated.", user.getAppUserId());
             result.addMessage(msg, ResultType.NOT_FOUND);
             return result;
@@ -142,5 +159,44 @@ public class AppUserService implements UserDetailsService {
             }
         }
         return digits > 0 && letters > 0 && others > 0;
+    }
+
+    public Result<AppUser> deleteById(int appUserId) {
+        Result<AppUser> result = new Result<>();
+        if (appUserId <= 0) {
+            result.addMessage("User must have an Id", ResultType.INVALID);
+            return result;
+        }
+
+        result.setPayload(
+                appUserRepository.findById(appUserId)
+        );
+        if (result.getPayload() == null) {
+            String msg = String.format("User %s not found", appUserId);
+            result.addMessage(msg, ResultType.NOT_FOUND);
+            return result;
+        }
+
+        prescriptionRepository.findAllById(appUserId)
+                .forEach(prescription -> {
+
+                    trackerRepository.findAllByPrescriptionId(prescription.getPrescriptionId())
+                        .forEach(tracker -> trackerRepository.deleteById(tracker.getTrackerId()));
+
+                    doctorRepository.findByAllByUserId(appUserId)
+                            .forEach(doctor -> doctorRepository.deleteById(doctor.getDoctorId()));
+
+                    pharmacyRepository.findAllByAppUserId(appUserId)
+                            .forEach(pharmacy -> pharmacyRepository.deleteById(pharmacy.getPharmacyId()));
+
+                    prescriptionRepository.deleteById(prescription.getPrescriptionId());
+
+                });
+
+        if (!appUserRepository.deleteById(appUserId)) {
+            result.addMessage("Error occurred while deleting user, please try again", ResultType.NOT_FOUND);
+        }
+
+        return result;
     }
 }

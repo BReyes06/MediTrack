@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/prescription")
+@RequestMapping("/api/prescription")
 public class PrescriptionController {
     private final PrescriptionService service;
 

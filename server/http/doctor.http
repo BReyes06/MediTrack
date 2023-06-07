@@ -1,11 +1,11 @@
-@url = http://localhost:8080
+@url = http://localhost:8080/api
 
-@token = eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtZWRpdHJhY2siLCJzdWIiOiJtY2hhbiIsImFwcF91c2VyX2lkIjoxLCJhdXRob3JpdGllcyI6IlVTRVIiLCJleHAiOjE2ODYxMDk3MzZ9.MqgLuJnPrXE3J2bBecGszWgf6N49HvzP5lvnII_Nweo
+@token = eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtZWRpdHJhY2siLCJzdWIiOiJtY2hhbiIsImFwcF91c2VyX2lkIjoxLCJhdXRob3JpdGllcyI6IlVTRVIiLCJleHAiOjE2ODYxNTUwNDV9.-jK1BBrLq-DgNr2oPh3vNJHYS2Exqhg2EYJ12vY2QHk
 
 ### 
 
 # Exists here to get token
-POST {{url}}/authenticate HTTP/1.1
+POST http://localhost:8080/authenticate HTTP/1.1
 Content-Type: application/json
 
 {
@@ -45,15 +45,15 @@ Authorization: Bearer {{token}}
 
 ### 
 
-# POST: Should update a doctor
-POST {{url}}/doctor HTTP/1.1
+# PUT: Should update a doctor
+PUT {{url}}/doctor/1 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-    "firstName" : "Test",
-    "middleName" : "T",
-    "lastName" : "Tester",
+    "firstName" : "Testeeee",
+    "middleName" : "",
+    "lastName" : "Testeeeee",
     "location" : "Tested Street",
     "phone" : "Tester Phone",
     "prescriptionId" : 1
