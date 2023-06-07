@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,7 +34,7 @@ class PrescriptionServiceTest {
     PharmacyRepository pharmacyRepository;
 
     @Test
-    void shouldFindAllByUsername() {
+    void shouldFindAllByUserId() {
         Prescription prescription = makePrescription();
         Prescription prescription2 = prescription;
         prescription2.setPrescriptionId(2);
@@ -47,6 +48,19 @@ class PrescriptionServiceTest {
 
         assertEquals(2, result.size());
     }
+
+    @Test
+    void shouldFindById() {
+        Prescription prescription = makePrescription();
+
+        when(prescriptionRepository.findById(1)).thenReturn(prescription);
+
+        Prescription result = service.findById(1);
+
+        assertNotNull(result);
+    }
+
+
 
     @Test
     void shouldAddValidPrescription() {

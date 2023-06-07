@@ -80,6 +80,7 @@ public class AppUserService implements UserDetailsService {
             return result;
         }
 
+        result.setPayload(user);
         return result;
     }
 

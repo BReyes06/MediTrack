@@ -37,9 +37,11 @@ public class PrescriptionController {
     @PostMapping
     public ResponseEntity<?> add(@RequestBody Map<String, String> prescription) {
         Prescription toAdd = new Prescription();
+
         AppUser appUser = new AppUser();
         appUser.setAppUserId(Integer.parseInt(prescription.get("app_user_id")));
         toAdd.setAppUser(appUser);
+
         toAdd.setPillCount(Integer.parseInt(prescription.get("pillCount")));
         toAdd.setHourlyInterval(Integer.parseInt(prescription.get("hourlyInterval")));
         toAdd.setProductNDC(prescription.get("product_ndc"));
@@ -62,7 +64,7 @@ public class PrescriptionController {
         prescription.setAppUser(appUser);
         prescription.setPillCount(Integer.parseInt(toUpdate.get("pillCount")));
         prescription.setHourlyInterval(Integer.parseInt(toUpdate.get("hourlyInterval")));
-        prescription.setProductNDC(toUpdate.get("productNDC"));
+        prescription.setProductNDC(toUpdate.get("product_ndc"));
         prescription.setStartTime(toUpdate.get("startTime"));
         prescription.setPrescriptionId(Integer.parseInt(toUpdate.get("prescriptionId")));
 
