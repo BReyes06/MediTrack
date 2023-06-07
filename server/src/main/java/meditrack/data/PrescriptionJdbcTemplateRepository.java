@@ -10,11 +10,11 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.Key;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class PrescriptionJdbcTemplateRepository implements PrescriptionRepository {
@@ -113,7 +113,9 @@ public class PrescriptionJdbcTemplateRepository implements PrescriptionRepositor
     @Transactional
     public boolean deleteById(int prescriptionId) {
         jdbcTemplate.update("delete from tracker where prescription_id = ?;", prescriptionId);
-        return jdbcTemplate.update("delete from prescription where prescription_id = ?;", prescriptionId) > 0;
+        boolean deleted = jdbcTemplate.update("delete from prescription where prescription_id = ?;", prescriptionId) > 0;
+
+        return deleted;
     }
 
     private Doctor addDoctor(Doctor doctor) {

@@ -17,23 +17,10 @@ import java.util.List;
 public class AppUserService implements UserDetailsService {
 
     private final AppUserRepository appUserRepository;
-    private final PrescriptionRepository prescriptionRepository;
-    private final DoctorRepository doctorRepository;
-    private final PharmacyRepository pharmacyRepository;
-    private final TrackerRepository trackerRepository;
     private final PasswordEncoder encoder;
 
-    public AppUserService(AppUserRepository repository,
-                          PrescriptionRepository prescriptionRepository,
-                          DoctorRepository doctorRepository,
-                          PharmacyRepository pharmacyRepository,
-                          TrackerRepository trackerRepository,
-                          PasswordEncoder encoder) {
+    public AppUserService(AppUserRepository repository, PasswordEncoder encoder) {
         this.appUserRepository = repository;
-        this.prescriptionRepository = prescriptionRepository;
-        this.doctorRepository = doctorRepository;
-        this.pharmacyRepository = pharmacyRepository;
-        this.trackerRepository = trackerRepository;
         this.encoder = encoder;
     }
 
@@ -101,6 +88,21 @@ public class AppUserService implements UserDetailsService {
         return result;
     }
 
+    public Result<AppUser> deleteById(int appUserId) {
+        Result<AppUser> result = new Result<>();
+        if (appUserId <= 0) {
+            result.addMessage("User must have an Id", ResultType.INVALID);
+            return result;
+        }
+
+        if (!appUserRepository.deleteById(appUserId)) {
+            String msg = String.format("User %s not found", appUserId);
+            result.addMessage(msg, ResultType.NOT_FOUND);
+        }
+
+        return result;
+    }
+
     private Result<AppUser> validate(AppUser user) {
         Result<AppUser> result = new Result<>();
         if (user == null) {
@@ -159,44 +161,5 @@ public class AppUserService implements UserDetailsService {
             }
         }
         return digits > 0 && letters > 0 && others > 0;
-    }
-
-    public Result<AppUser> deleteById(int appUserId) {
-        Result<AppUser> result = new Result<>();
-        if (appUserId <= 0) {
-            result.addMessage("User must have an Id", ResultType.INVALID);
-            return result;
-        }
-
-        result.setPayload(
-                appUserRepository.findById(appUserId)
-        );
-        if (result.getPayload() == null) {
-            String msg = String.format("User %s not found", appUserId);
-            result.addMessage(msg, ResultType.NOT_FOUND);
-            return result;
-        }
-
-        prescriptionRepository.findAllById(appUserId)
-                .forEach(prescription -> {
-
-                    trackerRepository.findAllByPrescriptionId(prescription.getPrescriptionId())
-                        .forEach(tracker -> trackerRepository.deleteById(tracker.getTrackerId()));
-
-                    doctorRepository.findByAllByUserId(appUserId)
-                            .forEach(doctor -> doctorRepository.deleteById(doctor.getDoctorId()));
-
-                    pharmacyRepository.findAllByAppUserId(appUserId)
-                            .forEach(pharmacy -> pharmacyRepository.deleteById(pharmacy.getPharmacyId()));
-
-                    prescriptionRepository.deleteById(prescription.getPrescriptionId());
-
-                });
-
-        if (!appUserRepository.deleteById(appUserId)) {
-            result.addMessage("Error occurred while deleting user, please try again", ResultType.NOT_FOUND);
-        }
-
-        return result;
     }
 }
