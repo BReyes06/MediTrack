@@ -39,10 +39,10 @@ interface smsMessage {
   message: string;
 }
 
-const textMessage: smsMessage ={
+const textMessage: smsMessage = {
   phone: "",
-  message: ""
-}
+  message: "",
+};
 
 interface AppUser {
   appUserId: number;
@@ -62,12 +62,17 @@ export const PrescriptionForm: React.FC = () => {
   const [user, setUser] = useState<AppUser>(defaultUser);
   const context = useContext(AuthContext);
   const navigate = useNavigate();
-  
-  console.log(textsms)
-  const textMessage: smsMessage ={
+
+  const textMessage: smsMessage = {
     phone: `${user.phone}`,
-    message: `You have added ${medication.medication} to be tracked. We will send you reminders every ${medication.hourlyInterval} starting at ${medication.startTime}.`
-  }
+    message: `You have added ${
+      medication.medication
+    } to be tracked. We will send you reminders every ${
+      medication.hourlyInterval * medication.num
+    } hour(s) starting on ${medication.startTime.split("T")[0]} at ${
+      medication.startTime.split("T")[1]
+    }.`,
+  };
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, value, type } = event.target;
@@ -87,12 +92,12 @@ export const PrescriptionForm: React.FC = () => {
 
   function handleChangeSms(event: React.ChangeEvent<HTMLInputElement>) {
     const { value, checked } = event.target;
-    if(value === "1" && checked) {
+    if (value === "1" && checked) {
       setTextsms(true);
     } else {
       setTextsms(false);
     }
-  };
+  }
 
   const resetForm = () => {
     setMedication(INITIAL_MED);
@@ -102,17 +107,20 @@ export const PrescriptionForm: React.FC = () => {
 
   useEffect(() => {
     fetchUser();
-}, [])
+  }, []);
 
   const fetchUser = async () => {
     try {
-        const foundUser = await getAppUserById(Number(context?.user?.app_user_id));
-        const { appUserId, phone } = foundUser
-        setUser({ appUserId, phone });
+      const foundUser = await getAppUserById(
+        Number(context?.user?.app_user_id)
+      );
+      console.log(foundUser);
+      const { appUserId, phone } = foundUser;
+      setUser({ appUserId, phone });
     } catch (error) {
-        console.log("Error Fetching")
+      console.log("Error Fetching");
     }
-  }
+  };
 
   const handleMedSearch = async () => {
     const search = await getMeds(medication?.medication);
@@ -138,18 +146,18 @@ export const PrescriptionForm: React.FC = () => {
     }
   };
 
-  const handleSubmit = async(event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (validatedMedication) {
-     try { 
+      try {
         await addPrescription(medication, context?.user!);
         resetForm();
         navigate("/prescriptions");
         if (textsms) {
-          await sendText(textMessage)
-        } 
-      } catch(error) {
-        console.log("Prescription Not Added")
+          await sendText(textMessage);
+        }
+      } catch (error) {
+        console.log("Prescription Not Added");
       }
     }
   };
@@ -293,9 +301,9 @@ export const PrescriptionForm: React.FC = () => {
               onChange={handleChange}
             />
           </div>
-          <br/>
+          <br />
           <div className="d-flex">
-              <p>Would you Like to receive text reminders?</p>
+            <p>Would you like to receive text reminders?</p>
           </div>
           <div className="d-flex justify-content-center">
             <input

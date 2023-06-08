@@ -90,7 +90,7 @@ export const Navbar = () => {
           <li className="nav-item">
             {context!.user && (
               <button
-                className="btn btn-danger"
+                className="btn btn-danger mt-2"
                 onClick={() => {
                   context!.logout();
                   navigate("/");

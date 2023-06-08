@@ -17,7 +17,7 @@ public class PrescriptionMapper implements RowMapper<Prescription> {
         Doctor doctor = new Doctor();
         Pharmacy pharmacy = new Pharmacy();
 
-        appUser.setAppUserId(rs.getInt(rs.getInt("app_user_id")));
+        appUser.setAppUserId(rs.getInt("app_user_id"));
         doctor.setDoctorId(rs.getInt("doctor_id"));
         pharmacy.setPharmacyId(rs.getInt("pharmacy_id"));
 

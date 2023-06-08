@@ -35,7 +35,7 @@ export const Login: React.FC = () => {
     authenticate(user)
       .then((loggedInUser) => {
         context!.login(loggedInUser);
-        setTimeout(refresh, 14 * 60 * 1000);
+        setTimeout(refresh, 29 * 60 * 1000);
         navigate("/");
       })
       .catch(() => setError(true));

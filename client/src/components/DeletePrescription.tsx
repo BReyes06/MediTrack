@@ -71,11 +71,11 @@ export const DeletePrescription = () => {
         <strong>Pill Count:&nbsp;</strong>
         {prescriptionInfo?.pillCount}
       </p>
-      <div>
-        <button className="btn btn-danger" onClick={handleDelete}>
+      <div className="text-center">
+        <button className="btn btn-danger mx-1" onClick={handleDelete}>
           Delete
         </button>
-        <Link to="/prescriptions" className="btn btn-dark">
+        <Link to="/prescriptions" className="btn btn-dark mx-1">
           Cancel
         </Link>
       </div>

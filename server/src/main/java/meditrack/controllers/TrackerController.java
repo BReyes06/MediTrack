@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +42,7 @@ public class TrackerController {
     public ResponseEntity<?> add(@RequestBody Map<String, String> toAdd) {
         Tracker tracker = new Tracker();
         tracker.setPrescriptionId(Integer.parseInt(toAdd.get("prescriptionId")));
-        tracker.setAdministrationTime(toAdd.get("administrationTime"));
+        tracker.setAdministrationTime(LocalDateTime.now().toString());
 
         Result<Tracker> result = service.add(tracker);
 

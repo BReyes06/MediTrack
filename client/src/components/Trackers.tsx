@@ -10,14 +10,12 @@ interface TrackerType {
 
 export const Tracker = () => {
   const { prescriptionId } = useParams();
+
   const [trackers, setTrackers] = useState<TrackerType[]>([]);
 
   function handleSubmit() {
-    // Get the current date and time in the client's local time zone
     const currentDate = new Date();
-
-    // Convert the date to the ISO 8601 format without the timezone offset
-    const isoString = currentDate.toISOString().slice(0, 19).replace("T", " ");
+    const isoString = currentDate.toISOString().slice(0, -8).replace("T", " ");
 
     const finalObject = {
       prescriptionId: parseInt(prescriptionId as string, 10),

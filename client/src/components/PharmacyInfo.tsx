@@ -65,7 +65,7 @@ export const PharmacyInfo = () => {
         </section>
       ) : (
         <>
-          <h1>You have no registered pharmacies.</h1>
+          <h1 className="text-center">You have no registered pharmacies.</h1>
         </>
       )}
       <Link
