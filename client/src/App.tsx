@@ -17,11 +17,12 @@ import { Tracker } from "./components/Trackers";
 import { DoctorInfo } from "./components/DoctorInfo";
 import { DoctorForm } from "./components/DoctorForm";
 import { EditDoctorForm } from "./components/EditDoctorForm";
+import { UserProfiles } from "./components/UserProfiles";
+import DeleteUser from "./components/DeleteUser";
 import { DeleteDoctor } from "./components/DeleteDoctor";
 import { PharmacyInfo } from "./components/PharmacyInfo";
 import { PharmacyAddForm } from "./components/PharmacyAddForm";
 import { PharmacyEditForm } from "./components/PharmacyEditForm";
-
 import { refresh } from "./services/auth";
 import { DeletePharmacy } from "./components/DeletePharmacy";
 
@@ -97,6 +98,8 @@ const App: React.FC = () => {
             />
             <Route path="/tracker/:prescriptionId" element={<Tracker />} />
             <Route path="/doctor/:prescriptionId" element={<DoctorInfo />} />
+            <Route path="/all_users" element={<UserProfiles />} />
+            <Route path="/delete_user/:appUserId" element={<DeleteUser />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>

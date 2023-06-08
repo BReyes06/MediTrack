@@ -76,6 +76,18 @@ export const Navbar = () => {
             )}
           </li>
           <li className="nav-item">
+            {context!.user && context!.user.authorities === "ADMIN" && (
+              <NavLink
+                to="/all_users"
+                className="nav-link"
+                data-toggle="collapse"
+                data-target="#navbarNav"
+              >
+                User Accounts
+              </NavLink>
+            )}
+          </li>
+          <li className="nav-item">
             {context!.user && (
               <button
                 className="btn btn-danger"
