@@ -97,8 +97,8 @@ insert into doctor(doctor_id, first_name, middle_name, last_name, location, phon
             
 insert into prescription(prescription_id, pill_count, hourly_interval, start_time, product_ndc, app_user_id, doctor_id, pharmacy_id)
 	values
-		(1, 30, 4, '2023-05-31 10:00:00','68788-7602-3', 1, 3, 1),
-		(2, 10, 24, '2023-05-31 10:00:00', '67877-511-38', 1, 2, 2);        
+		(1, 30, 4, '2023-05-31 10:00:00','58602-802', 1, 3, 1),
+		(2, 10, 24, '2023-05-31 10:00:00', '58602-802', 1, 2, 2);        
             
 
 insert into tracker(tracker_id, administration_time, prescription_id)

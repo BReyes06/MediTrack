@@ -38,6 +38,10 @@ public class AuthController {
         return appUserService.findAll();
     }
 
+    @GetMapping("/user/{userId}")
+    public AppUser findById(@PathVariable int userId) {
+        return appUserService.findById(userId);
+    }
 
     @PostMapping("/authenticate")
     public ResponseEntity<Map<String, String>> authenticate(@RequestBody Map<String, String> credentials) {
@@ -71,7 +75,6 @@ public class AuthController {
 
         return new ResponseEntity<>(map, HttpStatus.OK);
     }
-
 
     @PostMapping("/create_account")
     public ResponseEntity<?> createAccount(@RequestBody Map<String, String> credentials) {

@@ -31,7 +31,7 @@ const defaultUser: AppUser = {
 
 const DeleteUser: React.FC = ({}) => {
     const {appUserId} = useParams<{ appUserId: string }>();
-    const[user, setUser] = useState<AppUser>(defaultUser);
+    const [user, setUser] = useState<AppUser>(defaultUser);
     const navigate = useNavigate();
   
     useEffect(() => {
