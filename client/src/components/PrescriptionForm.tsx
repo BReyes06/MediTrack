@@ -164,7 +164,7 @@ export const PrescriptionForm: React.FC = () => {
 
   return (
     <section className="prescription-form">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} autoComplete="off">
         <div className="d-flex flex-column">
           <label htmlFor="medication" className="form-text">
             Medication Name:

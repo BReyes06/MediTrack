@@ -48,7 +48,7 @@ export const Signup = () => {
 
   return (
     <section>
-      <form onSubmit={handleSubmit} className="signup-form">
+      <form onSubmit={handleSubmit} className="signup-form" autoComplete="off">
         <h2>Create an account.</h2>
         <div>
           <label htmlFor="username" className="form-text">

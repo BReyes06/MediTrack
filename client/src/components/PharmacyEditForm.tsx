@@ -47,7 +47,7 @@ export const PharmacyEditForm = () => {
   }, []);
   return (
     <section>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} autoComplete="off">
         <div>
           <label htmlFor="name" className="form-text">
             Name

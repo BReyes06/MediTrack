@@ -69,7 +69,7 @@ export const EditPrescriptionForm: React.FC = () => {
 
   return (
     <section>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} autoComplete="off">
         <div>
           <label htmlFor="product" className="form-text">
             Product NDC

@@ -50,7 +50,7 @@ export const EditDoctorForm = () => {
 
   return (
     <section>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} autoComplete="off">
         <h2>Edit a Doctor</h2>
         <div>
           <label htmlFor="firstName" className="form-text">

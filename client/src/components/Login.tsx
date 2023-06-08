@@ -54,6 +54,7 @@ export const Login: React.FC = () => {
       <form
         className="d-flex flex-column align-items-center"
         onSubmit={handleSubmit}
+        autoComplete="off"
       >
         <h2>Enter your log in details.</h2>
         <div className="form-group">

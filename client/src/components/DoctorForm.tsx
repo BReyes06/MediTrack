@@ -50,6 +50,7 @@ export const DoctorForm = () => {
       <form
         className="d-flex flex-column align-items-center"
         onSubmit={handleSubmit}
+        autoComplete="off"
       >
         <div>
           <label htmlFor="firstName" className="form-text">

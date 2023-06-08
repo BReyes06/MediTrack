@@ -39,7 +39,7 @@ export const PharmacyAddForm = () => {
   }
   return (
     <section className="d-flex flex-column align-items-center">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} autoComplete="off">
         <h2>Add a Pharmacy</h2>
         <div>
           <label htmlFor="name" className="form-text">
