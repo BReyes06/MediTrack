@@ -27,10 +27,5 @@ export async function deleteAppUser(appUserId: number) {
             Authorization: `Bearer ${localStorage.getItem("jwt")}`,
         },
     };
-
-    const response = await fetch(`${url}/delete_user/${appUserId}`, init);
-    if (response.ok) {
-        const json = await response.json();
-        console.log(json)
-    }
+    const response = await fetch(`${url}/delete_account/${appUserId}`, init);
 }

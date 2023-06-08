@@ -57,34 +57,36 @@ const DeleteUser: React.FC = ({}) => {
     }
     
     return (
-        <section className="alert alert-danger" role="alert">
-      <h2>Are you sure you want to delete User with ID: {appUserId}</h2>
-      <h4>Account Type: {user.authorities[0]?.authority}</h4>
-      <p>
-        <strong>Username:&nbsp;</strong>
-        {user.username}
-      </p>
-      <p>
-        <strong>Name:&nbsp;</strong>
-        {user.firstName} {user.middleName} {user.lastName}
-      </p>
-      <p>
-        <strong>Email:&nbsp;</strong>
-        {user.email}
-      </p>
-      <p>
-        <strong>Phone Number:&nbsp;</strong>
-        {user.phone}
-      </p>
-      <div>
-        <button className="btn btn-danger" onClick={handleDelete}>
-          Delete
-        </button>
-        <Link to="/all_users" className="btn btn-dark mx-2">
-          Cancel
-        </Link>
-      </div>
-    </section>
+        <div className="container deleteUser">
+            <section className="alert alert-danger" role="alert">
+                <h2>Are you sure you want to delete User with ID: {appUserId}</h2>
+                <h4>Account Type: {user.authorities[0]?.authority}</h4>
+                <p>
+                    <strong>Username:&nbsp;</strong>
+                    {user.username}
+                </p>
+                <p>
+                    <strong>Name:&nbsp;</strong>
+                    {user.firstName} {user.middleName} {user.lastName}
+                </p>
+                <p>
+                    <strong>Email:&nbsp;</strong>
+                    {user.email}
+                </p>
+                <p>
+                    <strong>Phone Number:&nbsp;</strong>
+                    {user.phone}
+                </p>
+                <div>
+                    <button className="btn btn-danger" onClick={handleDelete}>
+                    Delete
+                    </button>
+                    <Link to="/all_users" className="btn btn-dark mx-2">
+                    Cancel
+                    </Link>
+                </div>
+            </section>
+        </div>
     )
 } 
 

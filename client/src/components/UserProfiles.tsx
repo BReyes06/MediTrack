@@ -32,7 +32,7 @@ export const UserProfiles: React.FC = () => {
     }
     
     return (
-        <div className="container">
+        <div className="container userProfiles">
             {appUsers.map((appUser) => {
                 return(
                     <UserProfileCard

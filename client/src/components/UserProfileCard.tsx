@@ -16,8 +16,6 @@ interface AppUser {
 }
 
 const UserProfileCard: React.FC<UserProfilesProps> = ({appUser}) => {
-
-    console.log(appUser)
     const authority = appUser.authorities[0]?.authority;
     return (
         <div className="d-flex flex-column align-items-center prescription-card mt-2">
