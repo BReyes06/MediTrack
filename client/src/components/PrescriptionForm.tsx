@@ -1,7 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { addPrescription, getMeds } from "../services/prescriptions";
 import { AuthContext } from "../contexts/AuthContext";
+import { sendText } from "../services/twilioSms";
+import { getAppUserById } from "../services/appUsers";
 
 type MedForm = {
   medication: string;
@@ -32,12 +34,40 @@ interface SearchResult {
   labeler_name: string;
 }
 
+interface smsMessage {
+  phone: string;
+  message: string;
+}
+
+const textMessage: smsMessage ={
+  phone: "",
+  message: ""
+}
+
+interface AppUser {
+  appUserId: number;
+  phone: string;
+}
+
+const defaultUser: AppUser = {
+  appUserId: 0,
+  phone: "",
+};
+
 export const PrescriptionForm: React.FC = () => {
   const [medication, setMedication] = useState(INITIAL_MED);
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [validatedMedication, setValidatedMedication] = useState(false);
+  const [textsms, setTextsms] = useState(false);
+  const [user, setUser] = useState<AppUser>(defaultUser);
   const context = useContext(AuthContext);
   const navigate = useNavigate();
+  
+  console.log(textsms)
+  const textMessage: smsMessage ={
+    phone: `${user.phone}`,
+    message: `You have added ${medication.medication} to be tracked. We will send you reminders every ${medication.hourlyInterval} starting at ${medication.startTime}.`
+  }
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, value, type } = event.target;
@@ -55,11 +85,34 @@ export const PrescriptionForm: React.FC = () => {
     }
   }
 
+  function handleChangeSms(event: React.ChangeEvent<HTMLInputElement>) {
+    const { value, checked } = event.target;
+    if(value === "1" && checked) {
+      setTextsms(true);
+    } else {
+      setTextsms(false);
+    }
+  };
+
   const resetForm = () => {
     setMedication(INITIAL_MED);
     setSearchResults([]);
     setValidatedMedication(false);
   };
+
+  useEffect(() => {
+    fetchUser();
+}, [])
+
+  const fetchUser = async () => {
+    try {
+        const foundUser = await getAppUserById(Number(context?.user?.app_user_id));
+        const { appUserId, phone } = foundUser
+        setUser({ appUserId, phone });
+    } catch (error) {
+        console.log("Error Fetching")
+    }
+  }
 
   const handleMedSearch = async () => {
     const search = await getMeds(medication?.medication);
@@ -85,12 +138,19 @@ export const PrescriptionForm: React.FC = () => {
     }
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async(event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (validatedMedication) {
-      addPrescription(medication, context?.user!);
-      resetForm();
-      navigate("/prescriptions");
+     try { 
+        await addPrescription(medication, context?.user!);
+        resetForm();
+        navigate("/prescriptions");
+        if (textsms) {
+          await sendText(textMessage)
+        } 
+      } catch(error) {
+        console.log("Prescription Not Added")
+      }
     }
   };
 
@@ -232,6 +292,34 @@ export const PrescriptionForm: React.FC = () => {
               className="form-control"
               onChange={handleChange}
             />
+          </div>
+          <br/>
+          <div className="d-flex">
+              <p>Would you Like to receive text reminders?</p>
+          </div>
+          <div className="d-flex justify-content-center">
+            <input
+              type="radio"
+              name="textmsg"
+              id="yes"
+              value={1}
+              onChange={handleChangeSms}
+            />
+            <label htmlFor="yes" className="mx-2 form-text">
+              Yes
+            </label>
+            <input
+              type="radio"
+              name="textmsg"
+              id="no"
+              value={24}
+              onChange={handleChangeSms}
+              className="mx-2"
+              defaultChecked
+            />
+            <label htmlFor="no" className="form-text">
+              No
+            </label>
           </div>
           <div className="mt-3 d-flex justify-content-center">
             <button className="btn btn-primary mx-2">Add</button>

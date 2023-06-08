@@ -15,8 +15,8 @@ import java.util.List;
 
 @Service
 public class AppUserService implements UserDetailsService {
-
     private final AppUserRepository appUserRepository;
+
     private final PasswordEncoder encoder;
 
     public AppUserService(AppUserRepository repository, PasswordEncoder encoder) {
@@ -37,6 +37,10 @@ public class AppUserService implements UserDetailsService {
 
     public List<AppUser> findAll() {
         return appUserRepository.findAll();
+    }
+
+    public AppUser findById(int userId) {
+        return appUserRepository.findById(userId);
     }
 
     public Result<AppUser> create(AppUser user) {

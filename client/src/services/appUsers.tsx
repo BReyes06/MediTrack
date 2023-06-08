@@ -15,9 +15,27 @@ export async function getAppUsers() {
         const json = await response.json();
         return json;
     } else {
-        console.log("ERROR!!")
+        console.log("Could not find App Users")
     }
 };
+
+export async function getAppUserById(appUserId: number){
+    const init = {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+        },
+    };
+    
+    const response = await fetch(`${url}/user/${appUserId}`, init);
+    if(response.ok) {
+        const json = await response.json();
+        return json;
+    } else {
+        console.log("Could not find User")
+    }
+}
 
 export async function deleteAppUser(appUserId: number) {
     const init = {
