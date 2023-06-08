@@ -101,3 +101,8 @@ body {
   border-radius: 0.5rem;
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
 }
+
+.userProfiles {
+  display: flex;
+  justify-content: center;
+}

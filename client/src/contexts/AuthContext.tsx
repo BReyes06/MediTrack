@@ -2,6 +2,7 @@ import { createContext, useState } from "react";
 
 interface AppUser {
   app_user_id: number;
+  authorities: string;
 }
 
 interface AuthContextType {
