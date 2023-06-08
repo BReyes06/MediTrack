@@ -17,6 +17,8 @@ import { Tracker } from "./components/Trackers";
 import { DoctorInfo } from "./components/DoctorInfo";
 import { DoctorForm } from "./components/DoctorForm";
 import { EditDoctorForm } from "./components/EditDoctorForm";
+import { UserProfiles } from "./components/UserProfiles";
+import DeleteUser from "./components/DeleteUser";
 
 import { refresh } from "./services/auth";
 
@@ -72,6 +74,8 @@ const App: React.FC = () => {
             />
             <Route path="/tracker/:prescriptionId" element={<Tracker />} />
             <Route path="/doctor/:prescriptionId" element={<DoctorInfo />} />
+            <Route path="/all_users" element={<UserProfiles />} />
+            <Route path="/delete_user/:appUserId" element={<DeleteUser />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
