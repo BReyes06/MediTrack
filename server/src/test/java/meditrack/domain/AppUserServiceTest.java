@@ -49,6 +49,15 @@ class AppUserServiceTest {
     }
 
     @Test
+    void shouldFindById() {
+        AppUser appUser = makeUser();
+        when(appUserRepository.findById(1)).thenReturn(appUser);
+
+        AppUser result = service.findById(1);
+        assertNotNull(result);
+    }
+
+    @Test
     void shouldAddValidUser() {
         AppUser expected = makeUser();
         expected.setPassword("$2a$10$d.ZgktC8GvqB7jUEQMihjensjX7N0orixYrkHHlv1mhTKPC1R0CCe");
